@@ -32,7 +32,7 @@ export default function Dashboard() {
         </div> 
         <div className="wd-dashboard-course"> 
           <Link href="/courses/3456" className="wd-dashboard-course-link">
-            <Image src="/images/oodpicture.jfif" width={200} height={150} alt="doom" />
+            <Image src="/images/oodpicture.jpg" width={200} height={150} alt="doom" />
               <div>
                 <h5> CS3500 OOD </h5>                                                   {/* Course 3 */}
                 <p className="wd-dashboard-course-title"> 
@@ -56,7 +56,7 @@ export default function Dashboard() {
         </div>
         <div className="wd-dashboard-course"> 
           <Link href="/courses/5678" className="wd-dashboard-course-link">
-            <Image src="/images/logicandcomppicture.jfif" width={200} height={150} alt="brain" />
+            <Image src="/images/logicandcomppicture.jpg" width={200} height={150} alt="brain" />
               <div>
                 <h5> CS2800 Logic </h5>                                                   {/* Course 5 */}
                 <p className="wd-dashboard-course-title"> 
@@ -92,7 +92,7 @@ export default function Dashboard() {
         </div>
         <div className="wd-dashboard-course"> 
           <Link href="/courses/8901" className="wd-dashboard-course-link">
-            <Image src="/images/networkpicture.jfif" width={200} height={150} alt="Servers, clouds, routers" />
+            <Image src="/images/networkpicture.jpg" width={200} height={150} alt="Servers, clouds, routers" />
               <div>
                 <h5> CS4700 Network </h5>                                                  {/* Course 8 */}
                 <p className="wd-dashboard-course-title"> 
@@ -104,7 +104,7 @@ export default function Dashboard() {
         </div>
         <div className="wd-dashboard-course"> 
           <Link href="/courses/9012" className="wd-dashboard-course-link">
-            <Image src="/images/datasciencepicture.jfif" width={200} height={150} alt="hand touching data science" />
+            <Image src="/images/datasciencepicture.jpg" width={200} height={150} alt="hand touching data science" />
               <div>
                 <h5> DS3000 Data Science </h5>                                                  {/* Course 9 */}
                 <p className="wd-dashboard-course-title"> 
@@ -116,7 +116,7 @@ export default function Dashboard() {
         </div>
         <div className="wd-dashboard-course"> 
           <Link href="/courses/1001" className="wd-dashboard-course-link">
-            <Image src="/images/writingpicture.jfif" width={200} height={150} alt="person writing" />
+            <Image src="/images/writingpicture.jpg" width={200} height={150} alt="person writing" />
               <div>
                 <h5> ENGW1111 Writing </h5>                                                  {/* Course 10 */}
                 <p className="wd-dashboard-course-title"> 
