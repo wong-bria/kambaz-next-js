@@ -172,12 +172,12 @@ export default function Lab1() {
       <div id="wd-images">
         <h4>Image tag</h4>
         Loading an image from the internet: <br />
-        <img id="wd-starship" width="400px"   
+        <img id="wd-starship" width="400px" alt="starship" 
           src="https://www.staradvertiser.com/wp-content/uploads/2021/08/web1_Starship-gap2.jpg" />
         <br /> 
         Loading a local image: 
         <br />
-        <img id="wd-teslabot" src="/images/teslabot.jpg" height="200px" />
+        <img id="wd-teslabot" src="/images/teslabot.jpg" height="200px" alt="teslabot" />
       </div>
 
       <div id="wd-forms">
@@ -286,8 +286,7 @@ export default function Lab1() {
         <h4>Anchor tag</h4> 
         Please <a href="https://www.lipsum.com" id="wd-lipsum">click here</a> to get dummy text<br/>
 
-        Please <a href="https://github.com" id="wd-github">click here</a> to go to github
-        {/* todo: ADD LINK TO GITHUB REPO!!!!!!!!! ADD LINK TO GITHUB REPO!!!!!!!!! ADD LINK TO GITHUB REPO!!!!!!!!! ADD LINK TO GITHUB REPO!!!!!!!!! ADD LINK TO GITHUB REPO!!!!!!!!! ADD LINK TO GITHUB REPO!!!!!!!!! */}
+        Please <a href="https://github.com/wong-bria/kambaz-next-js" id="wd-github">click here</a> to go to github
       </div>
     </div>
   );}
