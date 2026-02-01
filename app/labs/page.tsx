@@ -20,6 +20,9 @@ export default function labs() {
        <li>
           <Link href="/" id="wd-kambaz-link"> Kambaz</Link>
        </li>
+       <li>
+        <Link href="https://github.com/wong-bria/kambaz-next-js" id="wd-github">GitHub Repo</Link>
+        </li>
      </ul> 
    </div> 
 );}
