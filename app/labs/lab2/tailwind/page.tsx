@@ -1,0 +1,40 @@
+import "./index.css"; 
+import TailwindSpacing from "./tailwindspacing";
+import TailwindTypography from "./tailwindtypography";
+import TailwindBackgroundColors from "./tailwindbackgroundcolors";
+import TailwindResponsiveDesign from "./tailwindresponsivedesign";
+import TailwindFilters from "./tailwindfilters";
+import TailwindGrids from "./tailwindgrids";
+ 
+export default function TailwindLab() { 
+ return ( 
+   <div className="p-8"> 
+     <h1 className="text-4xl font-bold mb-8">Tailwind CSS</h1> 
+
+     <div>
+        <TailwindSpacing />
+     </div>
+
+     <div>
+        <TailwindTypography />
+     </div>
+
+     <div>
+        <TailwindBackgroundColors />
+     </div>
+
+     <div>
+        <TailwindResponsiveDesign />
+     </div>
+
+     <div>
+        <TailwindFilters />
+     </div>
+
+     <div>
+        <TailwindGrids />
+     </div>
+
+   </div> 
+
+);}
