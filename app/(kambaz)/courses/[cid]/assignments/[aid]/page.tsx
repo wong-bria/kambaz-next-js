@@ -106,10 +106,11 @@ page.`} />
             </Row>
             <Row>
               <Col className="mb-3"> 
-                <FormSelect id="wd-assign-to" defaultValue="Online">
-                  <option value="Online">change</option>
-                  <option value="On Paper">change</option>
-                  <option value="External Tool">change</option>
+                <FormSelect id="wd-assign-to" defaultValue="Everyone">
+                  <option value="Everyone">Everyone</option>
+                  <option value="Students">Students</option>
+                  <option value="TAsTeachers">TAs/Teacher</option>
+                  <option value="None">None</option>
                 </FormSelect> 
               </Col> 
             </Row>
