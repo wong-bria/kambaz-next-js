@@ -1,0 +1,39 @@
+p {
+  display: inline;
+}
+
+.wd-rounded-corners-all-around { 
+  border-radius: 50px; 
+} 
+
+.wd-border-thin { border-width: 1px; } 
+
+
+.wd-border-solid { border-style: solid; } 
+
+
+.wd-border-gray {
+  border-color: gray;
+}
+
+.wd-padding { 
+  padding: 5px; 
+} 
+
+
+.wd-assignment-flex-row-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.wd-assignment-flex-col-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  
+}
+
+.assignment-item-text {
+  font-size: 13px;
+}
