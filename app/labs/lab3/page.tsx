@@ -27,6 +27,10 @@ import Classes from "./classes";
 import Styles from "./styles";
 import ClientComponentDemo from "./clientcomponentdemo";
 import ServerComponentDemo from "./servercomponentdemo";
+import Add from "./add";
+import Square from "./square";
+import Highlight from "./highlight";
+import PathParameters from "./pathparameters";
 
 export default function Lab3() { 
   return( 
@@ -89,7 +93,22 @@ export default function Lab3() {
       <ClientComponentDemo/>
 
       <ServerComponentDemo/>
+
+      <Add a={3} b={4} />
+
+      <h4>Square of 4</h4> 
+      <Square>4</Square> 
+      <hr />
+
+       <Highlight> 
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe 
+totam vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident 
+voluptates. 
+     </Highlight>
       
+      <PathParameters/>
+
+
 
     </div> 
 );} 
