@@ -31,6 +31,8 @@ import Add from "./add";
 import Square from "./square";
 import Highlight from "./highlight";
 import PathParameters from "./pathparameters";
+import TodoItem from "./todos/todoitem";
+import TodoList from "./todos/todolist";
 
 export default function Lab3() { 
   return( 
@@ -107,6 +109,10 @@ voluptates.
      </Highlight>
       
       <PathParameters/>
+
+      <TodoItem todo={{ done: false, title: 'Buy milk', status: 'COMPLETED' }} />
+
+      <TodoList/>
 
 
 
