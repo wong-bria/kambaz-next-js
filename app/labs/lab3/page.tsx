@@ -23,6 +23,8 @@ import Spreading from "./spreader";
 import Destructuring from "./destructing";
 import FunctionDestructing from "./functiondestructing";
 import DestructingImports from "./destructingimports";
+import Classes from "./classes";
+import Styles from "./styles";
 
 export default function Lab3() { 
   return( 
@@ -77,6 +79,10 @@ export default function Lab3() {
       <FunctionDestructing/>
 
       <DestructingImports/>
+
+      <Classes/>
+
+      <Styles/>
       
 
     </div> 
