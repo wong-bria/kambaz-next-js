@@ -25,6 +25,8 @@ import FunctionDestructing from "./functiondestructing";
 import DestructingImports from "./destructingimports";
 import Classes from "./classes";
 import Styles from "./styles";
+import ClientComponentDemo from "./clientcomponentdemo";
+import ServerComponentDemo from "./servercomponentdemo";
 
 export default function Lab3() { 
   return( 
@@ -83,6 +85,10 @@ export default function Lab3() {
       <Classes/>
 
       <Styles/>
+
+      <ClientComponentDemo/>
+
+      <ServerComponentDemo/>
       
 
     </div> 
