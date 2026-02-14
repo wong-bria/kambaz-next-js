@@ -1,0 +1,115 @@
+[
+  {
+    "_id": "RS101",
+    "name": "React JS",
+    "number": "CS1234",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "D123",
+    "credits": 4,
+    "description": "Full Stack software developer",
+    "image": "/images/reactjs.jpg"
+  },
+  {
+    "_id": "RS102",
+    "name": "C++",
+    "number": "CS3520",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "D123",
+    "credits": 3,
+    "description": "Intro to C++",
+    "image": "/images/cpppicture.png"
+  },
+  {
+    "_id": "RS103",
+    "name": "OOD",
+    "number": "CS3500",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "D123",
+    "credits": 4,
+    "description": "Object Oriented Design",
+    "image": "/images/oodpicture.jpg"
+  },
+  {
+    "_id": "RS104",
+    "name": "Systems",
+    "number": "CS3650",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "D123",
+    "credits": 3,
+    "description": "Computer Systems",
+    "image": "/images/systemspicture.png"
+  },
+  {
+    "_id": "RS105",
+    "name": "Logic",
+    "number": "CS2800",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "D123",
+    "credits": 3,
+    "description": "Logic and Computation",
+    "image": "/images/logicandcomppicture.jpg"
+  },
+  {
+    "_id": "RS106",
+    "name": "Fundies 1",
+    "number": "CS2500",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "D123",
+    "credits": 3,
+    "description": "Fundamentals of Computer Science 1",
+    "image": "/images/fundies1.png"
+  },
+  {
+    "_id": "RS107",
+    "name": "Fundies 2",
+    "number": "CS2510",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "D123",
+    "credits": 3,
+    "description": "Fundamentals of Computer Science 2",
+    "author": "654f9ec2ea7ead465908d1e3",
+    "image": "/images/fundies2.png"
+  },
+  {
+    "_id": "RS108",
+    "name": "Network",
+    "number": "CS4700",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "D123",
+    "credits": 4,
+    "description": "Network Fundamentals",
+    "author": "654f9ec2ea7ead465908d1e3",
+    "image": "/images/networkpicture.jpg"
+  },
+  {
+    "_id": "RS109",
+    "name": "Data Science",
+    "number": "DS3000",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "Data Science",
+    "credits": 4,
+    "description": "Foundations of Data Science",
+    "author": "654f9ec2ea7ead465908d1e4",
+    "image": "/images/datasciencepicture.jpg"
+  },
+  {
+    "_id": "RS110",
+    "name": "Writing",
+    "number": "ENGW1111",
+    "startDate": "2023-01-10",
+    "endDate": "2023-05-15",
+    "department": "English",
+    "credits": 4,
+    "description": "First Year Writing",
+    "image": "/images/writingpicture.jpg"
+  }
+]
