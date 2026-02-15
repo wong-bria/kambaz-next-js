@@ -43,52 +43,5 @@ export default function KambazNavigation() {
         </ListGroupItem> 
       ))} 
 
-      {/* <ListGroupItem className="border-0 wd-nav-link-parent text-center"> 
-        <Link href="/account" id="wd-account-link" className="wd-nav-link text-decoration-none"> 
-          <FaRegCircleUser className="fs-1 text-white" /> 
-          <br /> 
-          Account 
-        </Link> 
-      </ListGroupItem>
-
-      <ListGroupItem className="border-0 bg-white text-center"> 
-        <Link href="/dashboard" id="wd-dashboard-link" className="text-danger text-decoration-none"> 
-          <AiOutlineDashboard className="fs-1 text-danger" /> 
-          <br /> 
-          Dashboard 
-        </Link> 
-      </ListGroupItem> 
-
-      <ListGroupItem className="border-0 wd-nav-link-parent text-center">
-        <Link href="/courses" id="wd-course-link" className="wd-nav-link text-decoration-none">
-          <LiaBookSolid className="fs-1 text-danger"/>
-          <br />
-          Courses
-        </Link>
-      </ListGroupItem>
-
-      <ListGroupItem className="border-0 wd-nav-link-parent text-center">
-        <Link href="/Calendar" id="wd-calendar-link" className="wd-nav-link text-decoration-none">
-          <IoCalendarOutline className="fs-1 text-danger"/>
-          <br />
-          Calendar
-        </Link>
-      </ListGroupItem>
-
-      <ListGroupItem className="border-0 wd-nav-link-parent text-center">
-        <Link href="/Inbox" id="wd-inbox-link" className="wd-nav-link text-decoration-none">
-          <FaInbox className="fs-1 text-danger"/>
-          <br />
-          Inbox
-        </Link>
-      </ListGroupItem>
-
-      <ListGroupItem className="border-0 wd-nav-link-parent text-center">
-        <Link href="/labs" id="wd-labs-link" className="wd-nav-link text-decoration-none">
-          <LiaCogSolid className="fs-1 text-danger"/>
-          <br />
-          Labs
-        </Link>
-      </ListGroupItem> */}
     </ListGroup> 
 );} 
