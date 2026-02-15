@@ -1,0 +1,782 @@
+[
+  {
+    "_id": "M101",
+    "name": "Week 1, Lecture 1 - Course Introduction, Syllabus, Agenda",
+    "description": "A general overview of the course.",
+    "course": "RS101",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "LEARNING OBJECTIVES",
+        "description": "Learning objectives of the course.",
+        "module": "M101"
+      },
+      {
+        "_id": "L102",
+        "name": "Introduction to the course",
+        "description": "Overview of the course structure and content.",
+        "module": "M101"
+      },
+      {
+        "_id": "L103",
+        "name": "Learn what is Web Development",
+        "description": "Overview of different types of web development technologies.",
+        "module": "M101"
+      }
+    ]
+  },
+  {
+    "_id": "M102",
+    "name": "Week 1, Lecture 2 - Formatting User Interfaces with HTML",
+    "description": "Working with HTML.",
+    "course": "RS101",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "READING",
+        "description": "First couple of readings for the course.",
+        "module": "M102"
+      },
+      {
+        "_id": "L202",
+        "name": "Full Stack Developer - Chapter 1 - Introduction",
+        "description": "Introduction to web development concepts.",
+        "module": "M102"
+      },
+      {
+        "_id": "L203",
+        "name": "Full Stack Developer - Chapter 2 - Creating User Interfaces With HTML",
+        "description": "Understanding HTML structure and elements.",
+        "module": "M102"
+      }
+    ]
+  },
+  {
+    "_id": "M103",
+    "name": "Week 2, Lecture 3 - Styling User Interfaces with CSS",
+    "description": "Introduction to CSS.",
+    "course": "RS101",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "SLIDES",
+        "description": "Overview of different types of CSS properties and their usage.",
+        "module": "M103"
+      },
+      {
+        "_id": "L302",
+        "name": "Introduction to Web Development",
+        "description": "Understanding CSS selectors, properties, and values.",
+        "module": "M103"
+      },
+      {
+        "_id": "L303",
+        "name": "Creating an HTTP server with Node.js",
+        "description": "Introduction to JavaScript and Node.js for web development.",
+        "module": "M103"
+      }
+    ]
+  },
+  {
+    "_id": "M201",
+    "name": "Basic Linux Commands; Using Makefile; Using GitHub; Hello World! Program",
+    "description": "Introduction to basic Linux commands, using Makefile, GitHub, and creating a Hello World! program.",
+    "course": "RS102",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Linux Commands",
+        "description": "Introduction to basic Linux commands.",
+        "module": "M201"
+      },
+      {
+        "_id": "L102",
+        "name": "Using Makefile",
+        "description": "Introduction to using Makefile for project automation.",
+        "module": "M201"
+      },
+      {
+        "_id": "L103",
+        "name": "Using GitHub",
+        "description": "Introduction to using GitHub for version control.",
+        "module": "M201"
+      }
+    ]
+  },
+  {
+    "_id": "M202",
+    "name": "Variables, data types and operations; Using libraries; Conditional statements loops",
+    "description": "Introduction to variables, data types, operations, and control structures in programming.",
+    "course": "RS102",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "Introduction to variables",
+        "description": "Introduction to variables in programming.",
+        "module": "M202"
+      },
+      {
+        "_id": "L202",
+        "name": "Introduction to data types",
+        "description": "Understanding different data types in programming.",
+        "module": "M202"
+      },
+      {
+        "_id": "L203",
+        "name": "Introduction to operations",
+        "description": "Overview of different types of operations in programming.",
+        "module": "M202"
+      }
+    ]
+  },
+  {
+    "_id": "M203",
+    "name": "Number systems and bit-wise operations; Introduction to pointers",
+    "description": "Introduction to number systems, bit-wise operations, and pointers.",
+    "course": "RS102",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "Introduction to Number systems",
+        "description": "Understanding different number systems in programming.",
+        "module": "M203"
+      },
+      {
+        "_id": "L302",
+        "name": "Introduction to Bit-wise Operations",
+        "description": "Understanding bit-wise operations in programming.",
+        "module": "M203"
+      },
+      {
+        "_id": "L303",
+        "name": "Introduction to Pointers",
+        "description": "Understanding pointers in programming.",
+        "module": "M203"
+      }
+    ]
+  },
+  {
+    "_id": "M301",
+    "name": "Introduction to OOD",
+    "description": "Introduction to Object-Oriented Design (OOD) principles.",
+    "course": "RS103",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Why object-oriented design?",
+        "description": "Understanding the importance and benefits of object-oriented design.",
+        "module": "M301"
+      },
+      {
+        "_id": "L102",
+        "name": "The essence of objects",
+        "description": "Understanding the concept of objects and their role in object-oriented design.",
+        "module": "M301"
+      },
+      {
+        "_id": "L103",
+        "name": "Java review",
+        "description": "Overview of Java programming concepts.",
+        "module": "M301"
+      }
+    ]
+  },
+  {
+    "_id": "M302",
+    "name": "Introduction to MVC",
+    "description": "Introduction to the Model-View-Controller (MVC) architectural pattern.",
+    "course": "RS103",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "Model in MVC",
+        "description": "Understanding the role of the Model in the MVC pattern.",
+        "module": "M302"
+      },
+      {
+        "_id": "L202",
+        "name": "View in MVC",
+        "description": "Understanding the role of the View in the MVC pattern.",
+        "module": "M302"
+      },
+      {
+        "_id": "L203",
+        "name": "Controller in MVC",
+        "description": "Understanding the role of the Controller in the MVC pattern.",
+        "module": "M302"
+      }
+    ]
+  },
+  {
+    "_id": "M303",
+    "name": "Introduction to various design patterns",
+    "description": "Overview of different design patterns in software development.",
+    "course": "RS103",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "The builder pattern.",
+        "description": "Understanding the builder pattern in software design.",
+        "module": "M303"
+      },
+      {
+        "_id": "L302",
+        "name": "Command Pattern",
+        "description": "Understanding the command pattern in software design.",
+        "module": "M303"
+      },
+      {
+        "_id": "L303",
+        "name": "Observer pattern",
+        "description": "Understanding the observer pattern in software design.",
+        "module": "M303"
+      }
+    ]
+  },
+  {
+    "_id": "M401",
+    "name": " Introduction, The UNIX process table",
+    "description": "Introduction to the UNIX process table and how processes are managed in a UNIX-like operating system.",
+    "course": "RS104",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Unix Process table",
+        "description": "Understanding the UNIX process table",
+        "module": "M401"
+      },
+      {
+        "_id": "L102",
+        "name": "Processes",
+        "description": "Understanding what processes are.",
+        "module": "M401"
+      },
+      {
+        "_id": "L103",
+        "name": "Understanding how processes are managed in a UNIX-like operating system.",
+        "description": "Overview of process management in UNIX-like operating systems.",
+        "module": "M401"
+      }
+    ]
+  },
+  {
+    "_id": "M402",
+    "name": "UNIX shell, fork/exec/wait, fds",
+    "description": "Introduction to the UNIX shell, process creation and management using fork/exec/wait, and file descriptors.",
+    "course": "RS104",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "UNIX Shell",
+        "description": "Introduction to the UNIX shell and its functionalities.",
+        "module": "M402"
+      },
+      {
+        "_id": "L202",
+        "name": "Fork/Exec/Wait",
+        "description": "Understanding process creation and management using fork, exec, and wait system calls.",
+        "module": "M402"
+      },
+      {
+        "_id": "L203",
+        "name": "File Descriptors",
+        "description": "Understanding file descriptors and their role in UNIX-like operating systems.",
+        "module": "M402"
+      }
+    ]
+  },
+  {
+    "_id": "M403",
+    "name": "Process synchronization, Locks (mutex, semaphore), deadlocks",
+    "description": "Introduction to process synchronization and the use of locks such as mutexes and semaphores.",
+    "course": "RS104",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "Introduction to process synchronization",
+        "description": "Overview of process synchronization and its importance in concurrent programming.",
+        "module": "M403"
+      },
+      {
+        "_id": "L302",
+        "name": "Locks (Mutex, Semaphore)",
+        "description": "Understanding the use of locks such as mutexes and semaphores in process synchronization.",
+        "module": "M403"
+      },
+      {
+        "_id": "L303",
+        "name": "Deadlocks",
+        "description": "Understanding deadlocks and how they occur in concurrent programming.",
+        "module": "M403"
+      }
+    ]
+  },
+  {
+    "_id": "M501",
+    "name": "Intro/Prop Logic, Atomic Data, Atomic Data II",
+    "description": "Introduction to propositional logic, atomic data, and atomic data II.",
+    "course": "RS105",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Introduction to Propositional Logic",
+        "description": "Overview of propositional logic and its applications.",
+        "module": "M501"
+      },
+      {
+        "_id": "L102",
+        "name": "Atomic Data",
+        "description": "Understanding atomic data and its significance in computing.",
+        "module": "M501"
+      },
+      {
+        "_id": "L103",
+        "name": "Atomic Data II",
+        "description": "Advanced concepts in atomic data and their applications.",
+        "module": "M501"
+      }
+    ]
+  },
+  {
+    "_id": "M502",
+    "name": "Itemizations / Compound Data, Recursive Data, Functions as Data",
+    "description": "Introduction to itemizations, compound data, recursive data, and functions as data.",
+    "course": "RS105",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "Itemizations",
+        "description": "Understanding itemizations and their role in data representation.",
+        "module": "M502"
+      },
+      {
+        "_id": "L202",
+        "name": "Compound Data",
+        "description": "Understanding compound data and its significance in computing.",
+        "module": "M502"
+      },
+      {
+        "_id": "L203",
+        "name": "Recursive Data",
+        "description": "Understanding recursive data structures and their applications.",
+        "module": "M502"
+      }
+    ]
+  },
+  {
+    "_id": "M503",
+    "name": "Mutation, Concurrency, and Performance",
+    "description": "Introduction to mutation, concurrency, and performance in computing.",
+    "course": "RS105",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "Mutation",
+        "description": "Understanding mutation and its impact on data integrity.",
+        "module": "M503"
+      },
+      {
+        "_id": "L302",
+        "name": "Concurrency",
+        "description": "Understanding concurrency and its challenges in computing.",
+        "module": "M503"
+      },
+      {
+        "_id": "L303",
+        "name": "Performance",
+        "description": "Understanding performance considerations in concurrent computing.",
+        "module": "M503"
+      }
+    ]
+  },
+  {
+    "_id": "M601",
+    "name": "Class Motivation; Basic Programming, Introduction to Design",
+    "description": "Introduction to class motivation, basic programming concepts, and design principles.",
+    "course": "RS106",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Class Motivation",
+        "description": "Understanding the motivation behind the class and its objectives.",
+        "module": "M601"
+      },
+      {
+        "_id": "L102",
+        "name": "Basic Programming",
+        "description": "Introduction to basic programming concepts.",
+        "module": "M601"
+      },
+      {
+        "_id": "L103",
+        "name": "Introduction to Design",
+        "description": "Overview of design principles and their applications.",
+        "module": "M601"
+      }
+    ]
+  },
+  {
+    "_id": "M602",
+    "name": "Design with Fixed-Size Data, Arbitrary Size, Design with Arbitrary-Size Data",
+    "description": "Introduction to design with fixed-size data, transitioning from fixed-size to arbitrary-size data, and designing with arbitrary-size data.",
+    "course": "RS106",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "Design with Fixed-Size Data",
+        "description": "Understanding design principles with fixed-size data.",
+        "module": "M602"
+      },
+      {
+        "_id": "L202",
+        "name": "From Fixed Size to Arbitrary Size",
+        "description": "Understanding the transition from fixed-size to arbitrary-size data.",
+        "module": "M602"
+      },
+      {
+        "_id": "L203",
+        "name": "Design with Arbitrary-Size Data",
+        "description": "Understanding design principles with arbitrary-size data.",
+        "module": "M602"
+      }
+    ]
+  },
+  {
+    "_id": "M603",
+    "name": "Function Abstractions, Scope, Lambda",
+    "description": "Introduction to function abstractions, scope, and lambda expressions.",
+    "course": "RS106",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "Function Abstractions",
+        "description": "Understanding function abstractions and their applications.",
+        "module": "M603"
+      },
+      {
+        "_id": "L302",
+        "name": "Scope",
+        "description": "Understanding scope and its impact on variable visibility.",
+        "module": "M603"
+      },
+      {
+        "_id": "L303",
+        "name": "Lambda",
+        "description": "Understanding lambda expressions and their applications.",
+        "module": "M603"
+      }
+    ]
+  },
+  {
+    "_id": "M701",
+    "name": "Data Definitions in Java, Data Definitions: Unions, Methods for simple classes",
+    "description": "Introduction to data definitions in Java, including unions and methods for simple classes.",
+    "course": "RS107",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Data Definitions in Java",
+        "description": "Introduction to data definitions in Java.",
+        "module": "M701"
+      },
+      {
+        "_id": "L102",
+        "name": "Data Definitions: Unions",
+        "description": "Understanding unions in data definitions.",
+        "module": "M701"
+      },
+      {
+        "_id": "L103",
+        "name": "Methods for Simple Classes",
+        "description": "Understanding methods for simple classes in data definitions.",
+        "module": "M701"
+      }
+    ]
+  },
+  {
+    "_id": "M702",
+    "name": "Methods for unions, Methods for self-referential lists, Accumulator methods",
+    "description": "Introduction to methods for unions, self-referential lists, and accumulator methods.",
+    "course": "RS107",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "Methods for Unions",
+        "description": "Understanding methods for unions in data definitions.",
+        "module": "M702"
+      },
+      {
+        "_id": "L202",
+        "name": "Methods for Self-Referential Lists",
+        "description": "Understanding methods for self-referential lists in data definitions.",
+        "module": "M702"
+      },
+      {
+        "_id": "L203",
+        "name": "Accumulator Methods",
+        "description": "Understanding accumulator methods in data definitions.",
+        "module": "M702"
+      }
+    ]
+  },
+  {
+    "_id": "M703",
+    "name": "Practice Design, Abstract classes and inheritance, Visitors",
+    "description": "Introduction to practice design, abstract classes, inheritance, and visitors.",
+    "course": "RS107",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "Practice Design",
+        "description": "Understanding practice design principles.",
+        "module": "M703"
+      },
+      {
+        "_id": "L302",
+        "name": "Abstract Classes and Inheritance",
+        "description": "Understanding abstract classes and inheritance in object-oriented design.",
+        "module": "M703"
+      },
+      {
+        "_id": "L303",
+        "name": "Visitors",
+        "description": "Understanding the visitor design pattern and its applications.",
+        "module": "M703"
+      }
+    ]
+  },
+  {
+    "_id": "M801",
+    "name": "Physical layer, Data link layer, Network layer",
+    "description": "Introduction to the physical, data link, and network layers in computer networking.",
+    "course": "RS108",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Physical Layer",
+        "description": "Understanding the physical layer in computer networking.",
+        "module": "M801"
+      },
+      {
+        "_id": "L102",
+        "name": "Data Link Layer",
+        "description": "Understanding the data link layer in computer networking.",
+        "module": "M801"
+      },
+      {
+        "_id": "L103",
+        "name": "Network Layer",
+        "description": "Understanding the network layer in computer networking.",
+        "module": "M801"
+      }
+    ]
+  },
+  {
+    "_id": "M802",
+    "name": "Intra-domain Routing, Inter-domain Routing, Transport layer",
+    "description": "Introduction to intra-domain routing, inter-domain routing, and the transport layer in computer networking.",
+    "course": "RS108",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "Intra-domain Routing",
+        "description": "Understanding intra-domain routing in computer networking.",
+        "module": "M802"
+      },
+      {
+        "_id": "L202",
+        "name": "Inter-domain Routing",
+        "description": "Understanding inter-domain routing in computer networking.",
+        "module": "M802"
+      },
+      {
+        "_id": "L203",
+        "name": "Transport Layer",
+        "description": "Understanding the transport layer in computer networking.",
+        "module": "M802"
+      }
+    ]
+  },
+  {
+    "_id": "M803",
+    "name": "NAT, DNS, Web",
+    "description": "Introduction to NAT, DNS, and web technologies in computer networking.",
+    "course": "RS108",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "NAT",
+        "description": "Understanding Network Address Translation (NAT) in computer networking.",
+        "module": "M803"
+      },
+      {
+        "_id": "L302",
+        "name": "DNS",
+        "description": "Understanding Domain Name System (DNS) in computer networking.",
+        "module": "M803"
+      },
+      {
+        "_id": "L303",
+        "name": "Web",
+        "description": "Understanding web technologies in computer networking.",
+        "module": "M803"
+      }
+    ]
+  },
+  {
+    "_id": "M901",
+    "name": "Python, NumPy, and Pandas",
+    "description": "Introduction to Python programming, NumPy for numerical computations, and Pandas for data manipulation.",
+    "course": "RS109",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Python",
+        "description": "Introduction to Python",
+        "module": "M901"
+      },
+      {
+        "_id": "L102",
+        "name": "NumPy",
+        "description": "Introduction to NumPy for numerical computations.",
+        "module": "M901"
+      },
+      {
+        "_id": "L103",
+        "name": "Pandas",
+        "description": "Introduction to Pandas for data manipulation.",
+        "module": "M901"
+      }
+    ]
+  },
+  {
+    "_id": "M902",
+    "name": "Data Collection, Data Cleaning, Data Visualization",
+    "description": "Introduction to data collection, data cleaning, and data visualization techniques.",
+    "course": "RS109",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "Data Collection",
+        "description": "Understanding data collection techniques.",
+        "module": "M902"
+      },
+      {
+        "_id": "L202",
+        "name": "Data Cleaning",
+        "description": "Understanding data cleaning techniques.",
+        "module": "M902"
+      },
+      {
+        "_id": "L203",
+        "name": "Data Visualization",
+        "description": "Understanding data visualization techniques.",
+        "module": "M902"
+      }
+    ]
+  },
+  {
+    "_id": "M903",
+    "name": "Introduction to Machine Learning, Supervised Learning, Unsupervised Learning",
+    "description": "Introduction to machine learning, including supervised and unsupervised learning techniques.",
+    "course": "RS109",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "Introduction to Machine Learning",
+        "description": "Overview of machine learning concepts and applications.",
+        "module": "M903"
+      },
+      {
+        "_id": "L302",
+        "name": "Supervised Learning",
+        "description": "Understanding supervised learning techniques.",
+        "module": "M903"
+      },
+      {
+        "_id": "L303",
+        "name": "Unsupervised Learning",
+        "description": "Understanding unsupervised learning techniques.",
+        "module": "M903"
+      }
+    ]
+  },
+  {
+    "_id": "M111",
+    "name": "Introduction to the course, The Rhetoric of Advertising, Thinking about Thinking",
+    "description": "Overview of the course, the rhetoric of advertising, and critical thinking.",
+    "course": "RS110",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "Introduction to the course",
+        "description": "Overview of the course and its objectives.",
+        "module": "M111"
+      },
+      {
+        "_id": "L102",
+        "name": "The Rhetoric of Advertising",
+        "description": "Understanding the principles of advertising and its impact on society.",
+        "module": "M111"
+      },
+      {
+        "_id": "L103",
+        "name": "Thinking about Thinking",
+        "description": "Introduction to critical thinking and cognitive processes.",
+        "module": "M111"
+      }
+    ]
+  },
+  {
+    "_id": "M112",
+    "name": "Thinking about Culture, Concede, Refute, Make Allies, and Material Object Paper",
+    "description": "Exploring cultural perspectives, argumentation strategies, and beginning the material object paper.",
+    "course": "RS110",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "Thinking about Culture",
+        "description": "Exploring cultural perspectives and their impact on society.",
+        "module": "M112"
+      },
+      {
+        "_id": "L202",
+        "name": "Concede, Refute, Make Allies",
+        "description": "Understanding argumentation strategies and techniques.",
+        "module": "M112"
+      },
+      {
+        "_id": "L203",
+        "name": "Starting the Material Object Paper",
+        "description": "Introduction to the material object paper and its requirements.",
+        "module": "M112"
+      }
+    ]
+  },
+  {
+    "_id": "M113",
+    "name": "Outside Sources and Case Studies, Systems, and Choosing a Problem",
+    "description": "Exploring the use of outside sources, case studies, and strategies for explaining and changing systems, as well as choosing the right problem.",
+    "course": "RS110",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "Using Outside Sources and Case Studies",
+        "description": "Understanding how to effectively use outside sources and case studies in research.",
+        "module": "M113"
+      },
+      {
+        "_id": "L302",
+        "name": "Explaining Systems and Changing Them",
+        "description": "Strategies for explaining and changing systems.",
+        "module": "M113"
+      },
+      {
+        "_id": "L303",
+        "name": "Choosing the Right Problem",
+        "description": "Techniques for identifying and selecting the most impactful problems to address.",
+        "module": "M113"
+      }
+    ]
+  }
+]
