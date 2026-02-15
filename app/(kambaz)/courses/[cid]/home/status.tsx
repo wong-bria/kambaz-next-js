@@ -8,8 +8,6 @@ import { BiSolidBarChartAlt2 } from "react-icons/bi";
 import { TfiAnnouncement } from "react-icons/tfi";
 import { FaBell } from "react-icons/fa";
 
-
-{/* Find more icons */} 
 export default function CourseStatus() { 
  return ( 
    <div id="wd-course-status" style={{ width: "350px" }}> 
