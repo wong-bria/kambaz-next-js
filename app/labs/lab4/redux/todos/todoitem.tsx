@@ -2,9 +2,20 @@ import { ListGroupItem, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux"; 
 import { deleteTodo, setTodo } from "./todosreducer";
 
+// Define the Todo type
+type Todo = {
+  id: string;
+  title: string;
+};
+
+// Define props type
+type TodoItemProps = {
+  todo: Todo;
+};
+
 export default function TodoItem({ todo, 
   // deleteTodo, setTodo
- }
+ }: TodoItemProps
 //  : { 
 //   todo: { id: string; title: string }; 
 //   deleteTodo: (id: string) => void; 
