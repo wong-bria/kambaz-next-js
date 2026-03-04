@@ -12,7 +12,7 @@ import ArrayStateVariable from "./arraystatevariable";
 import ParentStateComponent from "./parentstatecomponent";
 // import QueryCalculator from "./url-encoding/query-params/page";
 // import PathCalculator from "./url-encoding/path-params/[a]/[b]/page";
-import UrlEncoding from "./query-parameters";
+// import UrlEncoding from "./query-parameters";
 import Link from "next/link";
 import Store from "./store";
 import { Provider } from "react-redux";
@@ -49,9 +49,9 @@ export default function Lab4() {
 
         {/* <QueryCalculator/>
 
-        <PathCalculator/> */}
+        <PathCalculator/>
 
-        <UrlEncoding/>
+        <UrlEncoding/> */}
 
         <hr/>
 
