@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function Dashboard() { 
   const { courses } = useSelector((state: RootState) => state.coursesReducer); 
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer); 
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer) as any; 
   const { enrollments } = db; 
   const dispatch = useDispatch(); 
 
