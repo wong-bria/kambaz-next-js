@@ -14,20 +14,22 @@ export default function TodoForm() {
   const { todo } = useSelector((state: RootState) => state.todosReducer); 
   const dispatch = useDispatch(); 
   return ( 
-    <ListGroupItem> 
-      {/* <Button onClick={() => addTodo(todo)}  */}
-      <Button onClick={() => dispatch(addTodo(todo))}
-              id="wd-add-todo-click"
-              variant="success"
-              className="float-end"> Add </Button> 
+    <ListGroupItem className="d-flex align-items-center gap-2"> 
+      <FormControl style={{ maxWidth: "280px" }}
+                    value={todo.title} 
+          // onChange={ (e) => setTodo({ ...todo, title: e.target.value }) }/> 
+          onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))}/>
+  
       {/* <Button onClick={() => updateTodo(todo)}  */}
       <Button onClick={() => dispatch(updateTodo(todo))}
               id="wd-update-todo-click"
               variant="warning"
               className="float-end me-2"> Update </Button> 
-      <FormControl style={{ maxWidth: "280px" }}
-                   value={todo.title} 
-        // onChange={ (e) => setTodo({ ...todo, title: e.target.value }) }/> 
-        onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))}/>
+
+      {/* <Button onClick={() => addTodo(todo)}  */}
+      <Button onClick={() => dispatch(addTodo(todo))}
+              id="wd-add-todo-click"
+              variant="success"
+              className="float-end"> Add </Button> 
     </ListGroupItem> 
 );}
