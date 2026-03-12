@@ -66,27 +66,30 @@ export default function Dashboard() {
                 <Link href={`/courses/${course._id}/home`} 
                   className="wd-dashboard-course-link text-decoration-none text-dark" > 
                   <CardImg src={course.image} variant="top" width="100%" height={160} /> 
-                  <CardBody className="card-body"> 
-                  <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden"> 
-                    {course.name} </CardTitle> 
-                  <CardText className="wd-dashboard-course-description overflow-hidden" style={{height:"100px"}}> 
-                    {course.description} </CardText> 
-                  <Button variant="primary"> Go </Button> 
-                  <button onClick={(event) => { 
-                            event.preventDefault(); 
-                            dispatch(deleteCourse(course._id)); 
-                          }} className="btn btn-danger float-end" 
-                          id="wd-delete-course-click"> 
-                          Delete 
-                  </button>
-                  <button id="wd-edit-course-click" 
-                          onClick={(event) => { 
-                            event.preventDefault(); 
-                            setCourse(course); 
-                          }} 
-                          className="btn btn-warning me-2 float-end" > 
-                          Edit 
-                  </button>
+                  <CardBody className="card-body d-flex flex-column"> 
+                    <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden"> 
+                      {course.name} </CardTitle> 
+                    <CardText className="wd-dashboard-course-description overflow-hidden" style={{height:"100px"}}> 
+                      {course.description} </CardText> 
+
+                    <div className="mt-auto">
+                      <Button variant="primary"> Go </Button> 
+                      <button onClick={(event) => { 
+                                event.preventDefault(); 
+                                dispatch(deleteCourse(course._id)); 
+                              }} className="btn btn-danger float-end" 
+                              id="wd-delete-course-click"> 
+                              Delete 
+                      </button>
+                      <button id="wd-edit-course-click" 
+                              onClick={(event) => { 
+                                event.preventDefault(); 
+                                setCourse(course); 
+                              }} 
+                              className="btn btn-warning me-2 float-end" > 
+                              Edit 
+                      </button>
+                    </div>
                   </CardBody> 
                 </Link> 
                 </Card> 
