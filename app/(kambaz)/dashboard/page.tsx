@@ -19,7 +19,8 @@ export default function Dashboard() {
   const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer);
   const dispatch = useDispatch(); 
 
-  const role = (currentUser as any).role;
+  // const role = (currentUser as any).role;
+  const role = currentUser?.role;
   const isStudent = role === "STUDENT";
 
   const [showAllCourses, setShowAllCourses] = useState(false);
