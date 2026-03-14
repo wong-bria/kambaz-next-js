@@ -1,5 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import { addAssignment, deleteAssignment, updateAssignment, editAssignment } from "./reducer";
+import { useSelector, useDispatch } from "react-redux"; 
+import { RootState } from "../../../store"; 
+
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
@@ -13,10 +18,14 @@ import * as db from "../../../database";
 
 export default function Assignments() { 
   const { cid } = useParams();
-  const assignments = db.assignments.filter((assignment: any) => assignment.course === cid);
+  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer); 
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer); 
+  const role = (currentUser as any).role;
+  const isStudent = role === "STUDENT";
+  const dispatch = useDispatch();
   return ( 
     <div id="wd-assignments"> 
-      <AssignmentsControls /><br /><br /><br /><br />
+      <AssignmentsControls isStudent={isStudent} cid={cid as string} /><br /><br /><br /><br />
       <ListGroup>
         <ListGroupItem className="p-0 mb-5 fs-5 border-gray">
           <div id="wd-assignments-title" className="p-3 ps-2 bg-secondary">
@@ -26,7 +35,9 @@ export default function Assignments() {
           </div>
 
           <ListGroup id="wd-assignments-list" className="rounded-0">
-            {assignments.map((assignment: any) => (
+            {assignments
+            .filter((assignment: any) => assignment.course === cid)
+            .map((assignment: any) => (
               <ListGroupItem key={assignment._id}
                 id="wd-assignment-list-item" 
                 className="wd-assignment-list-item p-3 ps-1 align-items-center">
@@ -56,7 +67,8 @@ export default function Assignments() {
                         </div>
                       </div>
                     </div>
-                    <ControlButtons />
+                    <ControlButtons isStudent={isStudent} assignmentID={assignment._id}
+                                    deleteAssignment={(assignmentID) => {dispatch(deleteAssignment(assignmentID))}} />
                   </div>
                 </ListGroupItem>
             ))}

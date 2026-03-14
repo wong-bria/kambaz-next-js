@@ -1,15 +1,20 @@
 import { Button, InputGroup, FormControl } from "react-bootstrap"; 
+import Link from "next/link";
 import { FaPlus } from "react-icons/fa6"; 
 import { TfiSearch } from "react-icons/tfi";
 import InputGroupText from 'react-bootstrap/InputGroupText';
 
-export default function AssignmentsControls() { 
+export default function AssignmentsControls({ isStudent, cid }: { isStudent: boolean, cid: string }) { 
  return ( 
    <div id="wd-modules-controls" className="text-nowrap"> 
-      <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-assignment"> 
-        <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} /> 
-        Assignment 
-      </Button>
+      <Link href={`/courses/${cid}/assignments/new`}>
+        <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-assignment"
+                disabled={isStudent}> 
+          <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} /> 
+          Assignment 
+        </Button>
+      </Link>
+      
 
       <Button variant="secondary" size="lg" className="me-1 float-end" id="wd-add-assignment-group"> 
         <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} /> 
