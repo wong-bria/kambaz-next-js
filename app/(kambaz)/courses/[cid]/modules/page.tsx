@@ -22,6 +22,10 @@ export default function Modules() {
   const { modules } = useSelector((state: RootState) => state.modulesReducer); 
   const dispatch = useDispatch(); 
 
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer) as any; 
+  const role = (currentUser as any).role;
+  const isStudent = role === "STUDENT";
+
   // const addModule = () => { 
   //   setModules([ ...modules, { _id: uuidv4(), name: moduleName, course: cid, lessons: [] } ]); 
   //   setModuleName(""); 
@@ -40,7 +44,8 @@ export default function Modules() {
 
   return ( 
     <div className="wd-modules"> 
-      <ModulesControls setModuleName={setModuleName}
+      <ModulesControls isStudent={isStudent}
+                       setModuleName={setModuleName}
                        moduleName={moduleName} 
                        addModule={() => { 
                           dispatch(addModule({ name: moduleName, course: cid })); 
@@ -65,7 +70,8 @@ export default function Modules() {
                           }} 
                           defaultValue={module.name}/> 
                   )}  
-                  <ModuleControlButtons moduleId={module._id} 
+                  <ModuleControlButtons isStudent={isStudent}
+                                        moduleId={module._id} 
                                         deleteModule={(moduleId) => { 
                                           dispatch(deleteModule(moduleId)); 
                                         }}  

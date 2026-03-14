@@ -5,13 +5,13 @@ import { FaTrash } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6"; 
 
 export default function ModuleControlButtons(
-  { moduleId, deleteModule, editModule }: { 
-    moduleId: string; deleteModule: (moduleId: string) => void;
+  { isStudent, moduleId, deleteModule, editModule }: { 
+    isStudent: boolean; moduleId: string; deleteModule: (moduleId: string) => void;
     editModule: (moduleId: string) => void } ) { 
   return ( 
     <div className="float-end"> 
-      <FaPencil style={{ cursor: "pointer" }} onClick={() => editModule(moduleId)} className="text-primary me-3" /> 
-      <FaTrash style={{ cursor: "pointer" }} className="text-danger me-2 mb-1" onClick={() => deleteModule(moduleId)}/> 
+      <FaPencil style={{ cursor: !isStudent ? "pointer" : "default" }} onClick={() => !isStudent && editModule(moduleId)} className="text-primary me-3" /> 
+      <FaTrash style={{ cursor: !isStudent ? "pointer" : "default" }} className="text-danger me-2 mb-1" onClick={() => !isStudent && deleteModule(moduleId)}/> 
       <GreenCheckmark /> 
       <BsPlus className="fs-1" />
       <IoEllipsisVertical className="fs-4" /> 
