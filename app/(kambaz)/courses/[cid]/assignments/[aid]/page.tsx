@@ -1,10 +1,11 @@
 "use client";
 
+import * as client from "../client";
+import { setAssignments, addAssignment, updateAssignment, editAssignment } from "../reducer";
 import { useSelector, useDispatch } from "react-redux"; 
 import { RootState } from "../../../../store"; 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { addAssignment, updateAssignment } from "../reducer";
 import { FormControl, FormLabel, FormSelect, FormCheck, Row, Col } from "react-bootstrap";
 import { Form, FormGroup, Button } from "react-bootstrap";
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -41,6 +42,18 @@ export default function AssignmentEditor() {
 
     until: assignment?.until || ""
   });
+
+  const onCreateAssignmentForCourse = async () => { 
+      if (!cid) return; 
+      const assignment = await client.createAssignmentForCourse(cid as string, assignmentState); 
+      dispatch(setAssignments([...assignments, assignment])); 
+  }; 
+
+  const onUpdateAssignment = async (assignment: any) => { 
+      await client.updateAssignment(assignment); 
+      const newAssignments = assignments.map((a: any) => a._id === assignment._id ? assignment : a ); 
+      dispatch(setAssignments(newAssignments)); 
+  }; 
 
   return ( 
     <Form>
@@ -207,11 +220,11 @@ export default function AssignmentEditor() {
       <Row>
         <Col>
             <Button variant="danger" size="lg" className="me-1 float-end"
-              onClick={() => {
+              onClick={async () => {
                 if (aid === "new") {
-                  dispatch(addAssignment(assignmentState));
+                  await onCreateAssignmentForCourse();
                 } else {
-                  dispatch(updateAssignment(assignmentState));
+                  await onUpdateAssignment(assignmentState);
                 }
 
                 router.push(`/courses/${cid}/assignments`);
