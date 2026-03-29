@@ -14,11 +14,26 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { useParams } from "next/navigation";
 import * as db from "../../../../database";
 
+type Assignment = {
+  _id: string;
+  title: string;
+  course: string;
+  available: string;
+  due: string;
+  points: number;
+  description: string;
+  assignmentGroup: string;
+  display: string;
+  type: string;
+  options: string;
+  assign: string;
+  until: string;
+};
 
 export default function AssignmentEditor() { 
   const { cid, aid } = useParams();
-  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
-  const assignment = assignments.find((assignment: any) => assignment._id === aid);
+  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer) as { assignments: Assignment[] };
+  const assignment = assignments.find((assignment: Assignment) => assignment._id === aid);
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const isStudent = (currentUser as any)?.role === "STUDENT";
 

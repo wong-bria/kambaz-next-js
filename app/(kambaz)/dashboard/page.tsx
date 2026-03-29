@@ -1,21 +1,28 @@
 "use client";
 
-import * as client from "../courses/client"; 
+import * as client from "../courses/client";
+import * as enrollmentClient from "./client";
 import { RootState } from "../store"; 
 
 import { useDispatch, useSelector } from "react-redux"; 
 import { addNewCourse, deleteCourse, updateCourse, setCourses } from "../courses/reducer"; 
-import { enroll, unenroll } from "../dashboard/reducer";
+import { setEnrollments, enroll, unenroll } from "../dashboard/reducer";
 
 import { useEffect, useState } from "react";
 import Link from "next/link"; 
 import { Row, Col, Card, CardImg, CardBody, CardTitle, CardText, Button, FormControl } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
+type Enrollment = {
+  _id: string;
+  user: string;
+  course: string;
+};
+
 export default function Dashboard() { 
   const { courses } = useSelector((state: RootState) => state.coursesReducer); 
   const { currentUser } = useSelector((state: RootState) => state.accountReducer) as any; 
-  const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer);
+  const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer) as { enrollments: Enrollment[] };
   const dispatch = useDispatch(); 
 
   // const role = (currentUser as any).role;
@@ -23,14 +30,7 @@ export default function Dashboard() {
   const isStudent = role === "STUDENT";
 
   const [showAllCourses, setShowAllCourses] = useState(false);
-
-  // const filteredCourses = courses.filter((course) => 
-  //   currentUser &&
-  //   enrollments.some( 
-  //     (enrollment) => 
-  //       enrollment.user === currentUser._id && 
-  //       enrollment.course === course._id 
-  //     ));
+  const [allCourses, setAllCourses] = useState<any[]>([]);
 
   const [course, setCourse] = useState<any>({ 
     _id: "0", name: "New Course", number: "New Number", 
@@ -41,11 +41,23 @@ export default function Dashboard() {
   const onAddNewCourse = async () => { 
     const newCourse = await client.createCourse(course); 
     dispatch(setCourses([ ...courses, newCourse ])); 
+
+    dispatch(setEnrollments([
+      ...enrollments,
+      { _id: uuidv4(), user: currentUser._id, course: newCourse._id }
+    ]));
+
+    const allCourses = await client.fetchAllCourses();
+    setAllCourses(allCourses);
+    fetchCourses();
   };
 
   const onDeleteCourse = async (courseId: string) => { 
     const status = await client.deleteCourse(courseId); 
     dispatch(setCourses(courses.filter((course) => course._id !== courseId))); 
+    const allCourses = await client.fetchAllCourses();
+    setAllCourses(allCourses);
+    fetchCourses();
   };
 
   const onUpdateCourse = async () => { 
@@ -56,17 +68,59 @@ export default function Dashboard() {
   })));}; 
 
   const displayedCourses = showAllCourses
-  ? courses
+  ? allCourses
   : courses.filter((course) =>
       enrollments.some(
-        (e) => e.user === currentUser._id && e.course === course._id
+        (e: Enrollment) => e.user === currentUser._id && e.course === course._id
       )
     );
+
+  const fetchEnrollments = async () => {
+    const enrollments = await enrollmentClient.findEnrollmentsForUser(currentUser._id);
+    dispatch(setEnrollments(enrollments));
+  }
+
+  const handleEnrollments = async (courseId: string) => { 
+    await enrollmentClient.enrollUserInCourse(courseId, currentUser._id);
+
+    const updated = await enrollmentClient.findEnrollmentsForUser(currentUser._id);
+    dispatch(setEnrollments(updated));
+
+    const allCourses = await client.fetchAllCourses();
+    setAllCourses(allCourses);
+    fetchCourses();
+  }; 
+
+  const handleUnenrollments = async (courseId: string) => {
+    await enrollmentClient.unenrollUserInCourse(currentUser._id, courseId);
+
+    const updated = await enrollmentClient.findEnrollmentsForUser(currentUser._id);
+    dispatch(setEnrollments(updated));
+
+    const allCourses = await client.fetchAllCourses();
+    setAllCourses(allCourses);
+    fetchCourses();
+  }
+
+  const toggleShowAllCourses = async () => {
+  //   if (!showAllCourses) {
+  //   const updatedAllCourses = await client.fetchAllCourses();
+  //   setAllCourses(updatedAllCourses);
+  // }
+
+    setShowAllCourses(!showAllCourses);
+  };
+
+  useEffect(() => { 
+    fetchEnrollments(); 
+  }, []); 
 
   const fetchCourses = async () => { 
     try { 
       const courses = await client.findMyCourses(); 
+      const allCourses = await client.fetchAllCourses();
       dispatch(setCourses(courses)); 
+      setAllCourses(allCourses);
     } catch (error) { 
       console.error(error); 
     } 
@@ -81,9 +135,7 @@ export default function Dashboard() {
       <div className="d-flex align-items-center justify-content-between">
         <h1 id="wd-dashboard-title">Dashboard</h1>
         <button 
-          onClick={() => { 
-                  setShowAllCourses(!showAllCourses); 
-                }} className="btn btn-danger" 
+          onClick={toggleShowAllCourses} className="btn btn-danger" 
           > 
                 Enrollments 
         </button>
@@ -109,7 +161,7 @@ export default function Dashboard() {
           {displayedCourses
             .map((course) => {
                 const isEnrolled = enrollments.some(
-                  (e) => e.user === currentUser._id && e.course === course._id
+                  (e: Enrollment) => e.user === currentUser._id && e.course === course._id
                 );
 
               return (
@@ -147,13 +199,15 @@ export default function Dashboard() {
                         </button>
                       </div>
                       <Button variant={isEnrolled ? "danger" : "success"}
-                        onClick={(event) => {
+                        onClick={async (event) => {
                           event.preventDefault();
 
                           if (isEnrolled) {
-                            dispatch(unenroll({ user: currentUser._id, course: course._id }))
+                            await handleUnenrollments(course._id);
+                            // dispatch(unenroll({ user: currentUser._id, course: course._id }))
                           } else {
-                            dispatch(enroll({ user: currentUser._id, course: course._id }))
+                            await handleEnrollments(course._id);
+                            // dispatch(enroll({ user: currentUser._id, course: course._id }))
                           }
                         }}
                       >
