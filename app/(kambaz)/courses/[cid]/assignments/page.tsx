@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { addAssignment, deleteAssignment, updateAssignment, editAssignment } from "./reducer";
+import { useState, useEffect } from "react";
+import * as client from "./client";
+import { setAssignments, addAssignment, deleteAssignment, updateAssignment, editAssignment } from "./reducer";
 import { useSelector, useDispatch } from "react-redux"; 
 import { RootState } from "../../../store"; 
 
@@ -23,6 +24,20 @@ export default function Assignments() {
   const role = (currentUser as any).role;
   const isStudent = role === "STUDENT";
   const dispatch = useDispatch();
+
+  const fetchAssignments = async () => { 
+    const assignments = await client.findAssignmentsForCourse(cid as string); 
+    dispatch(setAssignments(assignments)); 
+  }; 
+
+  const onRemoveAssignment = async (assignmentId: string) => { 
+      await client.deleteAssignment(assignmentId); 
+      dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId))); 
+    };
+
+  useEffect(() => { 
+    fetchAssignments(); 
+  }, []); 
   return ( 
     <div id="wd-assignments"> 
       <AssignmentsControls isStudent={isStudent} cid={cid as string} /><br /><br /><br /><br />
@@ -36,7 +51,6 @@ export default function Assignments() {
 
           <ListGroup id="wd-assignments-list" className="rounded-0">
             {assignments
-            .filter((assignment: any) => assignment.course === cid)
             .map((assignment: any) => (
               <ListGroupItem key={assignment._id}
                 id="wd-assignment-list-item" 
@@ -68,7 +82,7 @@ export default function Assignments() {
                       </div>
                     </div>
                     <ControlButtons isStudent={isStudent} assignmentID={assignment._id}
-                                    deleteAssignment={(assignmentID) => {dispatch(deleteAssignment(assignmentID))}} />
+                                    deleteAssignment={(assignmentID) => onRemoveAssignment(assignmentID)} />
                   </div>
                 </ListGroupItem>
             ))}

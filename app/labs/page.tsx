@@ -21,6 +21,10 @@ export default function labs() {
          <Link href="/labs/lab4" id="wd-lab4-link"> 
            Lab 4: Maintaining State in React Apps </Link> 
        </li> 
+       <li> 
+         <Link href="/labs/lab5" id="wd-lab5-link"> 
+           Lab 5: Implementing RESTful Web APIs with Express.js </Link> 
+       </li> 
        <li>
           <Link href="/" id="wd-kambaz-link"> Kambaz</Link>
        </li>

@@ -1,10 +1,11 @@
 "use client";
 
+import * as client from "../client";
+import { setAssignments, addAssignment, updateAssignment, editAssignment } from "../reducer";
 import { useSelector, useDispatch } from "react-redux"; 
 import { RootState } from "../../../../store"; 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { addAssignment, updateAssignment } from "../reducer";
 import { FormControl, FormLabel, FormSelect, FormCheck, Row, Col } from "react-bootstrap";
 import { Form, FormGroup, Button } from "react-bootstrap";
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -13,11 +14,26 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { useParams } from "next/navigation";
 import * as db from "../../../../database";
 
+type Assignment = {
+  _id: string;
+  title: string;
+  course: string;
+  available: string;
+  due: string;
+  points: number;
+  description: string;
+  assignmentGroup: string;
+  display: string;
+  type: string;
+  options: string;
+  assign: string;
+  until: string;
+};
 
 export default function AssignmentEditor() { 
   const { cid, aid } = useParams();
-  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
-  const assignment = assignments.find((assignment: any) => assignment._id === aid);
+  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer) as { assignments: Assignment[] };
+  const assignment = assignments.find((assignment: Assignment) => assignment._id === aid);
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const isStudent = (currentUser as any)?.role === "STUDENT";
 
@@ -41,6 +57,18 @@ export default function AssignmentEditor() {
 
     until: assignment?.until || ""
   });
+
+  const onCreateAssignmentForCourse = async () => { 
+      if (!cid) return; 
+      const assignment = await client.createAssignmentForCourse(cid as string, assignmentState); 
+      dispatch(setAssignments([...assignments, assignment])); 
+  }; 
+
+  const onUpdateAssignment = async (assignment: any) => { 
+      await client.updateAssignment(assignment); 
+      const newAssignments = assignments.map((a: any) => a._id === assignment._id ? assignment : a ); 
+      dispatch(setAssignments(newAssignments)); 
+  }; 
 
   return ( 
     <Form>
@@ -207,11 +235,11 @@ export default function AssignmentEditor() {
       <Row>
         <Col>
             <Button variant="danger" size="lg" className="me-1 float-end"
-              onClick={() => {
+              onClick={async () => {
                 if (aid === "new") {
-                  dispatch(addAssignment(assignmentState));
+                  await onCreateAssignmentForCourse();
                 } else {
-                  dispatch(updateAssignment(assignmentState));
+                  await onUpdateAssignment(assignmentState);
                 }
 
                 router.push(`/courses/${cid}/assignments`);
