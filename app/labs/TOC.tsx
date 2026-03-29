@@ -50,5 +50,11 @@ export default function TOC() {
       <NavItem> 
         <NavLink href="https://github.com/wong-bria/kambaz-next-js">My GitHub</NavLink> 
       </NavItem> 
+      <NavItem> 
+        <NavLink href="https://github.com/wong-bria/kambaz-node-server-app">Node GitHub Repo</NavLink> 
+      </NavItem> 
+      <NavItem>
+        <NavLink href="https://kambaz-node-server-app-6jqg.onrender.com">Root of the server running on Render</NavLink> 
+      </NavItem>
     </Nav> 
 );}
