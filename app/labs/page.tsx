@@ -46,14 +46,6 @@ export default function labs() {
         </li>
         <li>
           <Link
-            href="https://github.com/wong-bria/kambaz-next-js"
-            id="wd-github"
-          >
-            GitHub Repo
-          </Link>
-        </li>
-        <li>
-          <Link
             href="https://github.com/wong-bria/kambaz-node-server-app"
             id="wd-node-repo"
           >
