@@ -25,7 +25,6 @@ export default function Dashboard() {
   const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer) as { enrollments: Enrollment[] };
   const dispatch = useDispatch(); 
 
-  // const role = (currentUser as any).role;
   const role = currentUser?.role;
   const isStudent = role === "STUDENT";
 
@@ -65,15 +64,30 @@ export default function Dashboard() {
     dispatch(setCourses(courses.map((c) => { 
         if (c._id === course._id) { return course; } 
         else { return c; } 
-  })));}; 
+    })));
+    const allCourses = await client.fetchAllCourses();
+    setAllCourses(allCourses);
+    fetchCourses();
+  }; 
 
   const displayedCourses = showAllCourses
   ? allCourses
   : courses.filter((course) =>
-      enrollments.some(
-        (e: Enrollment) => e.user === currentUser._id && e.course === course._id
+      enrollments?.some(
+        (e: Enrollment) => e?.user === currentUser._id && e?.course === course._id
       )
     );
+
+  // const displayedCourses = showAllCourses
+  // ? allCourses
+  // : courses.filter((course) => {
+  //     return enrollments?.some((e: Enrollment) => {
+  //       const match =
+  //         e?.user === currentUser?._id &&
+  //         e?.course === course?._id;
+  //       return match;
+  //     });
+  //   });
 
   const fetchEnrollments = async () => {
     const enrollments = await enrollmentClient.findEnrollmentsForUser(currentUser._id);
@@ -81,7 +95,7 @@ export default function Dashboard() {
   }
 
   const handleEnrollments = async (courseId: string) => { 
-    await enrollmentClient.enrollUserInCourse(courseId, currentUser._id);
+    await client.enrollIntoCourse(currentUser._id, courseId);
 
     const updated = await enrollmentClient.findEnrollmentsForUser(currentUser._id);
     dispatch(setEnrollments(updated));
@@ -92,7 +106,7 @@ export default function Dashboard() {
   }; 
 
   const handleUnenrollments = async (courseId: string) => {
-    await enrollmentClient.unenrollUserInCourse(currentUser._id, courseId);
+    await client.unenrollFromCourse(currentUser._id, courseId);
 
     const updated = await enrollmentClient.findEnrollmentsForUser(currentUser._id);
     dispatch(setEnrollments(updated));
@@ -103,11 +117,6 @@ export default function Dashboard() {
   }
 
   const toggleShowAllCourses = async () => {
-  //   if (!showAllCourses) {
-  //   const updatedAllCourses = await client.fetchAllCourses();
-  //   setAllCourses(updatedAllCourses);
-  // }
-
     setShowAllCourses(!showAllCourses);
   };
 
@@ -160,8 +169,8 @@ export default function Dashboard() {
         <Row xs={1} md={5} className="g-4">
           {displayedCourses
             .map((course) => {
-                const isEnrolled = enrollments.some(
-                  (e: Enrollment) => e.user === currentUser._id && e.course === course._id
+                const isEnrolled = enrollments?.some(
+                  (e: Enrollment) => e?.user === currentUser._id && e?.course === course._id
                 );
 
               return (

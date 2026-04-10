@@ -8,8 +8,6 @@ import * as client from "../client";
 import { RootState } from "../../store";
 import { Button, FormControl } from "react-bootstrap"; 
 
-import Link from "next/link"; 
-
 export default function Profile() { 
   const [profile, setProfile] = useState<any>({}); 
   const dispatch = useDispatch(); 
