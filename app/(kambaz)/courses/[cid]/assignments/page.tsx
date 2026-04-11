@@ -38,6 +38,7 @@ export default function Assignments() {
   useEffect(() => { 
     fetchAssignments(); 
   }, []); 
+  console.log("Assignments:", assignments);
   return ( 
     <div id="wd-assignments"> 
       <AssignmentsControls isStudent={isStudent} cid={cid as string} /><br /><br /><br /><br />

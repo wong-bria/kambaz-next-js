@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { useParams, useRouter } from "next/navigation"; 
 import { RootState } from "../../store";
 import { FaAlignJustify } from "react-icons/fa";
-import { courses } from "../../database";
 import Breadcrumb from "./breadcrumb";
  
 export default function CoursesLayout({ children }: { children: ReactNode }) { 
@@ -14,13 +13,17 @@ export default function CoursesLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const { courses } = useSelector((state: RootState) => state.coursesReducer); 
-  const course = courses.find((course: any) => course._id === cid); 
+  const course = courses?.find((course: any) => course && course._id === cid); 
 
   const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer);
   const { currentUser } = useSelector((state: RootState) => state.accountReducer) as any;
 
+  if (!currentUser || !enrollments) {
+    return null;
+  }
+
   const isEnrolled = enrollments.some(
-    (e: any) => e.user === currentUser?._id && e.course === cid
+    (e: any) => e.user === currentUser._id && e.course === cid
   );
 
   useEffect(() => {
