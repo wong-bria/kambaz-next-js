@@ -10,9 +10,9 @@ import * as client from "../client";
 
 export default function Signup() { 
   const [user, setUser] = useState({
-  username: "",
-  password: "",
-});
+    username: "",
+    password: "",
+  });
   const dispatch = useDispatch(); 
   const signup = async () => { 
     const currentUser = await client.signup(user); 
