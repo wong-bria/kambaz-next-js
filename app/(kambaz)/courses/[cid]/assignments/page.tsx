@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import * as client from "./client";
 import { setAssignments, addAssignment, deleteAssignment, updateAssignment, editAssignment } from "./reducer";
 import { useSelector, useDispatch } from "react-redux"; 
@@ -15,7 +15,6 @@ import AssignmentsControls from "./AssignmentsControls";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import ControlButtons from "./ControlButtons";
 import { useParams } from "next/navigation";
-import * as db from "../../../database";
 
 export default function Assignments() { 
   const { cid } = useParams();
@@ -87,7 +86,7 @@ export default function Assignments() {
                   </div>
                 </ListGroupItem>
             ))}
-            </ListGroup>
+          </ListGroup>
         </ListGroupItem>
       </ListGroup>
     </div> 

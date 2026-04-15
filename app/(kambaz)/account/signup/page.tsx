@@ -12,6 +12,7 @@ export default function Signup() {
   const [user, setUser] = useState({
   username: "",
   password: "",
+  role: "USER",
 });
   const dispatch = useDispatch(); 
   const signup = async () => { 
@@ -26,6 +27,11 @@ export default function Signup() {
                   placeholder="username" className="wd-username mb-2" />
      <FormControl value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })}
                   placeholder="password" className="wd-password mb-2" type="password" />
+      <select value={user.role} onChange={(e) => setUser({ ...user, role: e.target.value })}
+              className="form-select float-start w-25 mb-2 wd-select-role" > 
+        <option value="STUDENT">STUDENT</option> 
+        <option value="FACULTY">FACULTY</option> 
+      </select>
      <button onClick={signup} className="wd-signup-btn btn btn-primary mb-2 w-100"> Sign up </button><br /> 
      <Link id="wd-signin-link" href="/account/signin">Sign in</Link>
    </div> 
