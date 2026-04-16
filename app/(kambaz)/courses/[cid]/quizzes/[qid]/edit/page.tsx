@@ -29,17 +29,17 @@ type Quiz = {
   available: string,
   due: string,
   points: number,
-  shuffle: string,
+  shuffle: boolean,
   assignmentGroup: string,
   timeLimit: string,
-  multipleAttempts: string,
+  multipleAttempts: boolean,
   howManyAttempts: string,
   showCorrectAnswers: string,
   until: string,
   accessCode: string,
-  oneQuestionPerTime: string,
-  webcam: string,
-  lock: string,
+  oneQuestionPerTime: boolean,
+  webcam: boolean,
+  lock: boolean,
   published: boolean,
   questions: number,
   type: string
@@ -65,17 +65,17 @@ export default function QuizEditor() {
     available: quiz?.available || "",
     due: quiz?.due || "",
     points: quiz?.points || 0,
-    shuffle: quiz?.shuffle || "Yes",
+    shuffle: quiz?.shuffle || true,
     assignmentGroup: quiz?.assignmentGroup || "Quizzes",
     timeLimit: quiz?.timeLimit || "20 minutes",
-    multipleAttempts: quiz?.multipleAttempts || "No",
+    multipleAttempts: quiz?.multipleAttempts || false,
     howManyAttempts: quiz?.howManyAttempts || "1",
     showCorrectAnswers: quiz?.showCorrectAnswers || "Immediately",
     until: quiz?.until || "",
     accessCode: quiz?.accessCode || "",
-    oneQuestionPerTime: quiz?.oneQuestionPerTime || "Yes",
-    webcam: quiz?.webcam || "No",
-    lock: quiz?.lock || "No",
+    oneQuestionPerTime: quiz?.oneQuestionPerTime || true,
+    webcam: quiz?.webcam || false,
+    lock: quiz?.lock || false,
     published: quiz?.published || false,
     questions: quiz?.questions || 0,
     type: quiz?.type || "Graded Quiz"
@@ -186,10 +186,10 @@ export default function QuizEditor() {
             <FormLabel column sm={{span: 2, offset: 2}} className="text-end mb-4"></FormLabel> 
               <Col sm={8}> 
                 <FormLabel className="fw-bold">Options</FormLabel>
-                <FormCheck disabled={isStudent} defaultChecked={quizState.shuffle === "Yes"} type="checkbox" label="Shuffle Answers" className="mb-4" />
-                <FormCheck disabled={isStudent} defaultChecked={quizState.oneQuestionPerTime === "Yes"} type="checkbox" label="One Question at a Time" className="mb-4" />
-                <FormCheck disabled={isStudent} defaultChecked={quizState.webcam === "Yes"} type="checkbox" label="Webcam Required" className="mb-4" />
-                <FormCheck disabled={isStudent} defaultChecked={quizState.lock === "Yes"} type="checkbox" label="Lock Question After Answering" className="mb-4" />
+                <FormCheck disabled={isStudent} defaultChecked={quizState.shuffle === true} type="checkbox" label="Shuffle Answers" className="mb-4" />
+                <FormCheck disabled={isStudent} defaultChecked={quizState.oneQuestionPerTime === true} type="checkbox" label="One Question at a Time" className="mb-4" />
+                <FormCheck disabled={isStudent} defaultChecked={quizState.webcam === true} type="checkbox" label="Webcam Required" className="mb-4" />
+                <FormCheck disabled={isStudent} defaultChecked={quizState.lock === true} type="checkbox" label="Lock Question After Answering" className="mb-4" />
 
                 <div className="d-flex align-items-center mb-4">
                   <FormCheck disabled={isStudent} type="checkbox" label="Time Limit" className="me-3"/>
