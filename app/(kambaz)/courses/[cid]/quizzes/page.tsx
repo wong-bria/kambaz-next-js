@@ -14,6 +14,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import QuizzesControls from "./QuizzesControls";
 import { IoRocketOutline } from "react-icons/io5";
+import ControlButtons from "./ControlButtons";
+import "../assignments/index.css";
 
 
 export default function Quizzes() {
@@ -29,6 +31,44 @@ export default function Quizzes() {
       dispatch(setQuizzes(quizzes)); 
   }; 
 
+  const onRemoveQuiz = async (quizId: string) => { 
+    await client.deleteQuiz(quizId); 
+    dispatch(setQuizzes(quizzes.filter((q: any) => q._id !== quizId))); 
+  };
+
+  const togglePublish = async (quiz: any) => {
+    const updatedQuiz = { ...quiz, published: !quiz.published };
+
+    await client.updateQuiz(updatedQuiz);
+    dispatch(updateQuiz(updatedQuiz));
+  };
+
+  const parseQuizDate = (dateStr: string) => {
+      if (!dateStr) return null;
+      return new Date(dateStr);
+    };
+
+    const getQuizStatus = (quiz: any) => {
+    const now = new Date();
+
+    const availableDate = parseQuizDate(quiz.available);
+    const untilDate = parseQuizDate(quiz.until);
+
+    if (availableDate && now < availableDate) {
+      return `Not available until ${quiz.available}`;
+    }
+
+    if (availableDate && untilDate && now >= availableDate && now <= untilDate) {
+      return `Available ${quiz.available}`;
+    }
+
+    if (availableDate && now > availableDate) {
+      return "Closed";
+    }
+
+    return "Unknown";
+  };
+
   useEffect(() => { 
       fetchQuizzes(); 
     }, []); 
@@ -42,17 +82,47 @@ export default function Quizzes() {
             </div>
 
             <ListGroup className="rounded-0"> 
-              {quizzes.map((quiz: any) => (
-                <ListGroupItem key={quiz.id} className="wd-assignment-list-item p-3 ps-1 align-items-center">
+              {quizzes
+              .filter((quiz: any) => {
+                if (isStudent) {
+                  return quiz.published === true;
+                }
+                return true;
+              })
+              .map((quiz: any) => (
+                <ListGroupItem 
+                  key={quiz._id} 
+                  className="wd-assignment-list-item p-3 ps-1 align-items-center">
                   <div className="wd-assignment-flex-row-container">
-                    <IoRocketOutline className="me-3 fs-3 text-success" />
+                    <IoRocketOutline className="ms-3 me-3 fs-3 text-success" />
 
                     <div className="wd-assignment-flex-col-container">
                       <Link href={`/courses/${cid}/quizzes/${quiz._id}`}
                             className="wd-assignment-link mb-0 text-decoration-none text-black" > 
                             {quiz.title}
                       </Link>
+
+                      <div className="assignment-item-text">
+                        <div className="wd-assignment-flex-row-container">
+                          <div className="me-2 fw-bold">
+                            {getQuizStatus(quiz)}
+                          </div>
+                          <div className="me-2 ms-2">|</div>
+                          <div className="ms-2 me-2 fw-bold">Due {quiz.due}</div>
+                          <div className="me-2 ms-2"> | </div>
+                          <div className="ms-2 me-2">{quiz.points} pts</div>
+                          <div className="me-2 ms-2">|</div>
+                          <div className="ms-2 me-2">{quiz.questions} Questions</div>
+                          <div className="ms-2 me-2">|</div>
+                          <div className="ms-2">score</div>
+                        </div>
+                      </div>
                     </div>
+
+                    <ControlButtons isStudent={isStudent} quizID={quiz._id}
+                                    deleteQuiz={(quizID) => onRemoveQuiz(quizID)}
+                                    published={quiz.published}
+                                    togglePublish={() => togglePublish(quiz)} />
                   </div>
                 </ListGroupItem>
               ))}

@@ -12,7 +12,7 @@ export default function QuizzesControls({ isStudent, cid }: { isStudent: boolean
         <VscKebabVertical  />
       </Button>
 
-      <Link href={`/courses/${cid}/quizzes/new`}>
+      <Link href={`/courses/${cid}/quizzes/new/edit`}>
         <Button variant="danger" size="lg" className="me-1 float-end" id="wd-add-quiz"
                 disabled={isStudent}> 
           <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} /> 

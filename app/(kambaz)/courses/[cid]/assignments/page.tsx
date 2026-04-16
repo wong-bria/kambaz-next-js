@@ -30,9 +30,9 @@ export default function Assignments() {
   }; 
 
   const onRemoveAssignment = async (assignmentId: string) => { 
-      await client.deleteAssignment(assignmentId); 
-      dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId))); 
-    };
+    await client.deleteAssignment(assignmentId); 
+    dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId))); 
+  };
 
   useEffect(() => { 
     fetchAssignments(); 
@@ -58,11 +58,13 @@ export default function Assignments() {
                   <div className="wd-assignment-flex-row-container">
                     <BsGripVertical className="me-2 fs-3" />
                     <TfiWrite className="me-3 fs-3 text-success" />
+
                     <div className="wd-assignment-flex-col-container">
                       <Link href={`/courses/${cid}/assignments/${assignment._id}`}
                             className="wd-assignment-link mb-0 text-decoration-none text-black" > 
                             {assignment.title}
                       </Link>
+                      
                       <div className="assignment-item-text">
                         <div className="wd-assignment-flex-row-container">
                           <div className="text-danger me-2">Multiple Modules</div>

@@ -1,0 +1,17 @@
+.tabs {
+  border-bottom: 1px solid #ccc;
+}
+
+.tab {
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.tab.active {
+  border: 1px solid #ccc;
+  border-bottom: none;
+  background: white;
+  color: red;
+  position: relative;
+  top: 1px;
+}
