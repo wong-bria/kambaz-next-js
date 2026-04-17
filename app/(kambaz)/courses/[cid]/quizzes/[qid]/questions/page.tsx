@@ -159,16 +159,16 @@ export default function QuizQuestions() {
     }
 
     // update quiz points based on sum of question points
-    const totalPoints = calculateTotalPoints(draftQuestions);
+    // const totalPoints = calculateTotalPoints(draftQuestions);
 
-    await client.updateQuiz({
-      ...quiz,
-      points: totalPoints,
-    });
+    // await client.updateQuiz({
+    //   ...quiz,
+    //   points: totalPoints,
+    // });
 
-    // re-fetch quizzes from server
-    const updatedQuizzes = await client.findQuizzesForCourse(cid);
-    dispatch(setQuizzes(updatedQuizzes));
+    // // re-fetch quizzes from server
+    // const updatedQuizzes = await client.findQuizzesForCourse(cid);
+    // dispatch(setQuizzes(updatedQuizzes));
 
     await fetchQuestions();
   };
