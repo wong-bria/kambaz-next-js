@@ -97,10 +97,12 @@ export default function QuizEditor() {
     type: quiz?.type || "Graded Quiz",
   });
 
-  const onCreateQuizForCourse = async () => {
+  const onCreateQuizForCourse = async (quizToCreate: any) => {
     if (!cid) return;
-    const quiz = await client.createQuizForCourse(cid as string, quizState);
+    const quiz = await client.createQuizForCourse(cid as string, quizToCreate);
     dispatch(setQuizzes([...quizzes, quiz]));
+
+    return quiz;
   };
 
   const onUpdateQuiz = async (quiz: any) => {
@@ -187,7 +189,7 @@ export default function QuizEditor() {
             <Col sm={8}>
               <FormSelect disabled={isStudent} defaultValue={quiz?.assignmentGroup}
                 onChange={(e) => {
-                  setQuizState({ ...quizState, type: e.target.value });
+                  setQuizState({ ...quizState, assignmentGroup: e.target.value });
                 }}
               >
                 <option value="Quizzes">Quizzes</option>
@@ -248,8 +250,8 @@ export default function QuizEditor() {
             </Col>
           </Row>
         </FormGroup>
+
         <FormGroup className="mb-4">
-          
           <Row>   
             <FormLabel column sm={{ span: 2, offset: 2 }} className="text-end mb-4" >  
               Assign
@@ -330,6 +332,7 @@ export default function QuizEditor() {
             </Col>
           </Row>
         </FormGroup>
+        
         <FormGroup controlId="show-correct-answers">
           <Row>
             <FormLabel column sm={{ span: 2, offset: 2 }} className="text-end mb-4" >
@@ -368,9 +371,10 @@ export default function QuizEditor() {
             <Button variant="danger" size="lg" className="me-1 float-end"
               onClick={async () => {
                 const updatedQuiz = { ...quizState, published: true };
-                setQuizState(updatedQuiz);
+                // setQuizState(updatedQuiz);
                 if (qid === "new") {
-                  await onCreateQuizForCourse();
+                  await onCreateQuizForCourse(updatedQuiz);
+                  dispatch(setQuizzes([...quizzes, updatedQuiz]));
                 } else {
                   await onUpdateQuiz(updatedQuiz);
                 }
@@ -383,7 +387,7 @@ export default function QuizEditor() {
             <Button variant="danger" size="lg" className="me-1 float-end"
               onClick={async () => {
                 if (qid === "new") {
-                  await onCreateQuizForCourse();
+                  await onCreateQuizForCourse(quizState);
                 } else {
                   await onUpdateQuiz(quizState);
                 }

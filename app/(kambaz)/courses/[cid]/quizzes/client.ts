@@ -14,7 +14,7 @@ export const createQuizForCourse = async (courseId: string, quiz: any) => {
     `${COURSES_API}/${courseId}/quizzes`,
     quiz,
   );
-  return response.data;
+  return response.data; 
 };
 
 export const deleteQuiz = async (quizId: string) => {
