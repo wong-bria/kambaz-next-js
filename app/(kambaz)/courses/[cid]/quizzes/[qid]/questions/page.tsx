@@ -62,14 +62,15 @@ export default function QuizQuestions() {
   const cid = Array.isArray(params.cid) ? params.cid[0] : params.cid;
   const qid = Array.isArray(params.qid) ? params.qid[0] : params.qid;
 
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   const { quizzes } = useSelector((state: RootState) => state.quizzesReducer) as { quizzes: Quiz[] };
   const quiz = quizzes.find((quiz: Quiz) => quiz._id === qid);
-  // const questions = quiz?.questions || [];
 
   const { questions } = useSelector((state: RootState) => state.questionsReducer) as { questions: Question[] };
 
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const [draftQuestions, setDraftQuestions] = useState<Question[]>([]);
   
   
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
@@ -81,33 +82,90 @@ export default function QuizQuestions() {
   const [questionType, setQuestionType] = useState("MULTIPLE CHOICE"); 
   const [questionChoices, setQuestionChoices] = useState<string[]>([]); 
 
+  // fetches questions and initalizes draft questions
   const fetchQuestions = async () => {
     if (!qid) return;
     const questions = await client.findQuestionsForQuiz(qid as string);
     dispatch(setQuestions(questions));
+    setDraftQuestions(questions);
   };
 
-  const onCreateQuestionForQuiz = async () => { 
-    if (!qid) return; 
-    const newQuestion = { title: questionTitle, points: questionPoints, question: questionText, type: questionType, possibleAnswers: questionChoices, quiz: qid }; 
-    const question = await client.createQuestionForQuiz(qid, newQuestion); 
-    dispatch(setQuestions([...questions, question])); 
-  }; 
+  // const onCreateQuestionForQuiz = async () => { 
+  //   if (!qid) return; 
+  //   const newQuestion = { title: questionTitle, points: questionPoints, question: questionText, type: questionType, possibleAnswers: questionChoices, quiz: qid }; 
+  //   const question = await client.createQuestionForQuiz(qid, newQuestion); 
+  //   dispatch(setQuestions([...questions, question])); 
+  // }; 
 
-  const onRemoveModule = async (questionId: string) => {
-    if (!qid) return;
+  // const onRemoveModule = async (questionId: string) => {
+  //   if (!qid) return;
 
-    await client.deleteQuestion(qid, questionId); 
-    dispatch(setQuestions(questions.filter((q: any) => q._id !== questionId))); 
-  }; 
+  //   await client.deleteQuestion(qid, questionId); 
+  //   dispatch(setQuestions(questions.filter((q: any) => q._id !== questionId))); 
+  // }; 
 
-  const onUpdateQuestion = async (question: any) => { 
-    if (!qid) return;
+  // const onUpdateQuestion = async (question: any) => { 
+  //   if (!qid) return;
     
-    await client.updateQuestion(qid, question); 
-    const newQuestions = questions.map((q: any) => q._id === question._id ? question : q ); 
-    dispatch(setQuestions(newQuestions)); 
-  }; 
+  //   await client.updateQuestion(qid, question); 
+  //   const newQuestions = questions.map((q: any) => q._id === question._id ? question : q ); 
+  //   dispatch(setQuestions(newQuestions)); 
+  // }; 
+
+  // CREATE (draft only)
+  const onCreateQuestionForQuiz = () => {
+    const newQuestion: Question = {
+      _id: "temp-" + Date.now(),
+      title: "New Question",
+      points: 0,
+      question: "",
+      type: "MULTIPLE CHOICE",
+    };
+
+    setDraftQuestions([...draftQuestions, newQuestion]);
+  };
+
+  // DELETE (draft only)
+  const onDeleteQuestion = (id: string) => {
+    setDraftQuestions(draftQuestions.filter(q => q._id !== id));
+  };
+
+  // UPDATE (draft only)
+  const onUpdateQuestion = (updated: Question) => {
+    setDraftQuestions(
+      draftQuestions.map(q => q._id === updated._id ? updated : q)
+    );
+  };
+
+  // QUIZ SAVE (commit to server)
+  const handleSaveQuiz = async () => {
+    if (!qid) return;
+
+    // create or update
+    for (const q of draftQuestions) {
+      const exists = questions.find(orig => orig._id === q._id);
+
+      if (!exists) {
+        await client.createQuestionForQuiz(qid, q);
+      } else {
+        await client.updateQuestion(qid, q);
+      }
+    }
+
+    // deletions
+    for (const orig of questions) {
+      if (!draftQuestions.find(q => q._id === orig._id)) {
+        await client.deleteQuestion(qid, orig._id);
+      }
+    }
+
+    await fetchQuestions();
+  };
+
+  // QUIZ CANCEL (discard draft)
+  const handleCancelQuiz = () => {
+    setDraftQuestions(questions);
+  };
 
   useEffect(() => {
     fetchQuestions();
@@ -133,11 +191,11 @@ export default function QuizQuestions() {
 
 
       <div>
-        {questions?.length === 0 && (
+        {draftQuestions?.length === 0 && (
           <div className="text-muted mb-3">No questions yet.</div>
        )}
 
-        {questions?.map((q: any) => (
+        {draftQuestions?.map((q: any) => (
           <div key={q._id}>
 
             {q.type === "MULTIPLE CHOICE" && 
@@ -166,14 +224,21 @@ export default function QuizQuestions() {
 
       <div className="d-flex justify-content-center mt-5">
         <Button variant="secondary" size="lg"
-                onClick={async () => {
-                  await onCreateQuestionForQuiz();
-                  await fetchQuestions();
-                  setQuestionTitle("");
-                  setQuestionText("");
-                  setQuestionPoints(0);
-                }}>
+                onClick={onCreateQuestionForQuiz}>
           <FaPlus className="me-2" /> New Question
+        </Button>
+      </div>
+
+
+      <hr/>
+
+      <div className="d-flex justify-content-end mt-5">
+        <Button variant="secondary" className="me-2" onClick={handleCancelQuiz} >
+          Cancel
+        </Button>
+
+        <Button variant="danger" onClick={handleSaveQuiz} >
+          Save
         </Button>
       </div>
 
