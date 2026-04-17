@@ -33,8 +33,8 @@ export default function Modules() {
   const onCreateModuleForCourse = async () => { 
     if (!cid) return; 
     const newModule = { name: moduleName, course: cid }; 
-    const module = await client.createModuleForCourse(cid, newModule); 
-    dispatch(setModules([...modules, module])); 
+    const moduleNew = await client.createModuleForCourse(cid, newModule); 
+    dispatch(setModules([...modules, moduleNew])); 
   }; 
 
   const onRemoveModule = async (moduleId: string) => {

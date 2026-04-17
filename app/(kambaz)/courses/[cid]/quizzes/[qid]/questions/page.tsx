@@ -58,10 +58,15 @@ type Quiz = {
 };
 
 export default function QuizQuestions() {
-  const { cid, qid } = useParams();
+  const params = useParams();
+  const cid = Array.isArray(params.cid) ? params.cid[0] : params.cid;
+  const qid = Array.isArray(params.qid) ? params.qid[0] : params.qid;
+
   const { quizzes } = useSelector((state: RootState) => state.quizzesReducer) as { quizzes: Quiz[] };
   const quiz = quizzes.find((quiz: Quiz) => quiz._id === qid);
-  const questions = quiz?.questions || [];
+  // const questions = quiz?.questions || [];
+
+  const { questions } = useSelector((state: RootState) => state.questionsReducer) as { questions: Question[] };
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -84,7 +89,7 @@ export default function QuizQuestions() {
 
   const onCreateQuestionForQuiz = async () => { 
     if (!qid) return; 
-    const newQuestion = { title: questionTitle, points: questionPoints, question: questionText, type: questionType, possibleAnswers: questionChoices }; 
+    const newQuestion = { title: questionTitle, points: questionPoints, question: questionText, type: questionType, possibleAnswers: questionChoices, quiz: qid }; 
     const question = await client.createQuestionForQuiz(qid, newQuestion); 
     dispatch(setQuestions([...questions, question])); 
   }; 
@@ -126,20 +131,42 @@ export default function QuizQuestions() {
         </Link>
       </div>
 
+
       <div>
         {questions?.length === 0 && (
-        <div className="text-muted mb-3">No questions yet.</div>
-      )}
+          <div className="text-muted mb-3">No questions yet.</div>
+       )}
 
-      {questions?.map((q: any) => (
-        <div key={q._id}>title: {q.title} testestset</div>
-      ))}
+        {questions?.map((q: any) => (
+          <div key={q._id}>
+
+            {q.type === "MULTIPLE CHOICE" && 
+              <div>
+                MULTIPLE CHOICE
+              </div>  
+            }
+
+            {q.type === "TRUE FALSE" && 
+              <div>
+                TRUE FALSE
+              </div>
+            }
+
+            {q.type === "FILL IN THE BLANK" && 
+              <div>
+                FILL IN THE BLANK
+              </div>
+            }
+
+          </div>
+        ))}
       </div>
+
+
 
       <div className="d-flex justify-content-center mt-5">
         <Button variant="secondary" size="lg"
                 onClick={async () => {
-                  console.log("HELLO I AM HERE")
                   await onCreateQuestionForQuiz();
                   await fetchQuestions();
                   setQuestionTitle("");

@@ -15,7 +15,6 @@ type Question = {
   choices: Choice[];
   correctAnswer?: boolean;
   possibleAnswers?: string[];
-  quizId: string;
 };
 
 type QuestionsState = {
