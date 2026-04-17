@@ -14,6 +14,22 @@ import { useParams } from "next/navigation";
 // import * as db from "../../../../database";
 import { PiPencilLight } from "react-icons/pi";
 
+type Choice = {
+  _id: string;
+  text: string;
+  isCorrect: boolean;
+};
+
+type Question = {
+  _id: string;
+  title: string;
+  points: number;
+  question: string;
+  type: "MULTIPLE CHOICE" | "TRUE FALSE" | "FILL IN THE BLANK";
+  choices?: Choice[];
+  correctAnswer?: boolean;
+  possibleAnswers?: string[];
+};
 
 type Quiz = {
   _id: string,
@@ -34,7 +50,7 @@ type Quiz = {
   webcam: boolean,
   lock: boolean,
   published: boolean,
-  questions: number,
+  questions: Question[],
   type: string
 };
 
@@ -48,34 +64,12 @@ export default function QuizDetail() {
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const isStudent = (currentUser as any)?.role === "STUDENT";
 
-  const [quizState, setQuizState] = useState({
-    _id: qid,
-    title: quiz?.title || "",
-    course: cid,
-    available: quiz?.available || "",
-    due: quiz?.due || "",
-    points: quiz?.points || 0,
-    shuffle: quiz?.shuffle || "Yes",
-    assignmentGroup: quiz?.assignmentGroup || "Quizzes",
-    timeLimit: quiz?.timeLimit || "20 minutes",
-    multipleAttempts: quiz?.multipleAttempts || "No",
-    howManyAttempts: quiz?.howManyAttempts || "1",
-    showCorrectAnswers: quiz?.showCorrectAnswers || "Immediately",
-    until: quiz?.until || "",
-    accessCode: quiz?.accessCode || "",
-    oneQuestionPerTime: quiz?.oneQuestionPerTime || "Yes",
-    webcam: quiz?.webcam || "No",
-    lock: quiz?.lock || "No",
-    published: quiz?.published || false,
-    questions: quiz?.questions || 0,
-    type: quiz?.type || "Graded Quiz"
-
-  });
+  const yesNo = (value: boolean | undefined) => (value ? "Yes" : "No");
 
   if (isStudent) {
     return (
       <div>
-        <h2>{quizState.title}</h2>
+        <h2>{quiz?.title}</h2>
         <button className="btn btn-primary">Start Quiz</button>
       </div>
     );
@@ -98,79 +92,79 @@ export default function QuizDetail() {
 
         <div className="mt-3 p-3"
              style={{ borderStyle: "dashed", borderColor: "gray", borderWidth: "2px" }}>
-          <h3>{quizState.title}</h3>
+          <h3>{quiz?.title}</h3>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">Quiz Type</Col> 
-            <Col sm={8}>{quizState.type}</Col> 
+            <Col sm={8}>{quiz?.type}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">Points</Col> 
-            <Col sm={8}>{quizState.points}</Col> 
+            <Col sm={8}>{quiz?.points}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">Assignment Group</Col> 
-            <Col sm={8}>{quizState.assignmentGroup}</Col> 
+            <Col sm={8}>{quiz?.assignmentGroup}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">Shuffle Answers</Col> 
-            <Col sm={8}>{quizState.shuffle}</Col> 
+            <Col sm={8}>{yesNo(quiz?.shuffle)}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">Time Limit</Col> 
-            <Col sm={8}>{quizState.timeLimit}</Col> 
+            <Col sm={8}>{quiz?.timeLimit}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">Multiple Attempts</Col> 
-            <Col sm={8}>{quizState.multipleAttempts}</Col> 
+            <Col sm={8}>{yesNo(quiz?.multipleAttempts)}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">How Many Attempts</Col> 
-            <Col sm={8}>{quizState.howManyAttempts}</Col> 
+            <Col sm={8}>{quiz?.howManyAttempts}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">View Responses</Col> 
-            <Col sm={8}>{quizState.type}</Col> 
+            <Col sm={8}>{quiz?.type}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">Show Correct Answers</Col> 
-            <Col sm={8}>{quizState.showCorrectAnswers}</Col> 
+            <Col sm={8}>{quiz?.showCorrectAnswers}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">Access Code</Col> 
-            <Col sm={8}>{quizState.accessCode}</Col> 
+            <Col sm={8}>{quiz?.accessCode}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">One Question at a Time</Col> 
-            <Col sm={8}>{quizState.oneQuestionPerTime}</Col> 
+            <Col sm={8}>{yesNo(quiz?.oneQuestionPerTime)}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 2, offset: 1}} className="text-end mb-4 fw-bold">Webcam Required</Col> 
-            <Col sm={8}>{quizState.webcam}</Col> 
+            <Col sm={8}>{yesNo(quiz?.webcam)}</Col> 
           </Row>
 
           <Row>
             <Col sm={{span: 3, offset: 0}} className="text-end mb-4 fw-bold">Lock Questions After Answering</Col> 
-            <Col sm={8}>{quizState.lock}</Col> 
+            <Col sm={8}>{yesNo(quiz?.lock)}</Col> 
           </Row>
 
           <br/>
 
           <Row>
-            <Col sm={{span: 2, offset: 0}} className="text-end mb-4 fw-bold">Due {quizState.due}</Col> 
-            <Col sm={{span: 3, offset: 2}} className="text-end mb-4 fw-bold">Available from {quizState.available}</Col> 
-            <Col sm={{span: 3, offset: 0}} className="text-end mb-4 fw-bold">Until {quizState.until}</Col> 
+            <Col sm={{span: 2, offset: 0}} className="text-end mb-4 fw-bold">Due {quiz?.due}</Col> 
+            <Col sm={{span: 3, offset: 2}} className="text-end mb-4 fw-bold">Available from {quiz?.available}</Col> 
+            <Col sm={{span: 3, offset: 0}} className="text-end mb-4 fw-bold">Until {quiz?.until}</Col> 
           </Row>
         </div>
 

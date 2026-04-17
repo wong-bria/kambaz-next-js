@@ -112,7 +112,7 @@ export default function Quizzes() {
                           <div className="me-2 ms-2"> | </div>
                           <div className="ms-2 me-2">{quiz.points} pts</div>
                           <div className="me-2 ms-2">|</div>
-                          <div className="ms-2 me-2">{quiz.questions} Questions</div>
+                          <div className="ms-2 me-2">{quiz.questions.length} Questions</div>
                           <div className="ms-2 me-2">|</div>
                           <div className="ms-2">score</div>
                         </div>

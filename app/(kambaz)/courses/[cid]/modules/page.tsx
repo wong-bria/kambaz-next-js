@@ -8,15 +8,12 @@ import { ListGroup, ListGroupItem } from "react-bootstrap";
 import ModuleControlButtons from "./ModuleControlButtons";
 import LessonControlButtons from "./LessonControlButtons";
 import { BsGripVertical } from "react-icons/bs";
-import { v4 as uuidv4 } from "uuid"; 
 import { FormControl } from "react-bootstrap";
-import { setModules, addModule, editModule, updateModule, deleteModule } 
-  from "./reducer"; 
+import { setModules, addModule, editModule, updateModule, deleteModule } from "./reducer"; 
 import { useSelector, useDispatch } from "react-redux"; 
 import { RootState } from "../../../store"; 
 
 export default function Modules() { 
-  // const { cid } = useParams();
   const params = useParams();
   const cid = Array.isArray(params.cid) ? params.cid[0] : params.cid;
 

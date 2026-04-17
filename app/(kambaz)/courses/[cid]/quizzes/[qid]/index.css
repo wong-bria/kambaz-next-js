@@ -3,7 +3,7 @@
 }
 
 .tab {
-  color: #6c757d;
+  color: red;
   cursor: pointer;
 }
 
@@ -11,7 +11,7 @@
   border: 1px solid #ccc;
   border-bottom: none;
   background: white;
-  color: red;
+  color: black;
   position: relative;
   top: 1px;
 }

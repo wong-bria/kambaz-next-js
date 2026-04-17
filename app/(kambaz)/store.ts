@@ -5,6 +5,7 @@ import accountReducer from "./account/reducer";
 import assignmentsReducer from "./courses/[cid]/assignments/reducer";
 import enrollmentsReducer from "./dashboard/reducer";
 import quizzesReducer from "./courses/[cid]/quizzes/reducer";
+import questionsReducer from "./courses/[cid]/quizzes/[qid]/questions/reducer";
 
 const store = configureStore({ 
  reducer: { coursesReducer,
@@ -12,7 +13,8 @@ const store = configureStore({
             accountReducer,
             assignmentsReducer,
             enrollmentsReducer,
-            quizzesReducer
+            quizzesReducer,
+            questionsReducer
   }, 
 }); 
 export type RootState = ReturnType<typeof store.getState>; 

@@ -26,3 +26,25 @@ export const updateQuiz = async (quiz: any) => {
   const { data } = await axios.put(`${QUIZZES_API}/${quiz._id}`, quiz); 
   return data; 
 }; 
+
+export const findQuestionsForQuiz = async (quizId: string) => {
+  const response = await axios.get(`${QUIZZES_API}/${quizId}/questions`);
+  return response.data;
+};
+
+export const createQuestionForQuiz = async (quizId: string, question: any) => {
+  const response = await axios.post(`${QUIZZES_API}/${quizId}/questions`,
+    question,
+  );
+  return response.data;
+}
+
+export const deleteQuestion = async (quizId: string, questionId: string) => {
+  const response = await axios.delete(`${QUIZZES_API}/${quizId}/questions/${questionId}`);
+  return response.data;
+};
+
+export const updateQuestion = async (quizId: string, question: any) => { 
+  const { data } = await axios.put(`${QUIZZES_API}/${quizId}/questions/${question._id}`, question); 
+  return data; 
+};
