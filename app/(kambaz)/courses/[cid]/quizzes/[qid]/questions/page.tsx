@@ -89,27 +89,6 @@ export default function QuizQuestions() {
     setOriginalQuestions(questions);
   };
 
-  // const onCreateQuestionForQuiz = async () => { 
-  //   if (!qid) return; 
-  //   const newQuestion = { title: questionTitle, points: questionPoints, question: questionText, type: questionType, possibleAnswers: questionChoices, quiz: qid }; 
-  //   const question = await client.createQuestionForQuiz(qid, newQuestion); 
-  //   dispatch(setQuestions([...questions, question])); 
-  // }; 
-
-  // const onRemoveModule = async (questionId: string) => {
-  //   if (!qid) return;
-
-  //   await client.deleteQuestion(qid, questionId); 
-  //   dispatch(setQuestions(questions.filter((q: any) => q._id !== questionId))); 
-  // }; 
-
-  // const onUpdateQuestion = async (question: any) => { 
-  //   if (!qid) return;
-    
-  //   await client.updateQuestion(qid, question); 
-  //   const newQuestions = questions.map((q: any) => q._id === question._id ? question : q ); 
-  //   dispatch(setQuestions(newQuestions)); 
-  // }; 
 
   // CREATE (draft only)
   const onCreateQuestionForQuiz = () => {
@@ -124,21 +103,14 @@ export default function QuizQuestions() {
     setDraftQuestions([...draftQuestions, newQuestion]);
   };
 
-  // DELETE (draft only)
-  const onDeleteQuestion = (id: string) => {
-    setDraftQuestions(draftQuestions.filter(q => q._id !== id));
-  };
-
-  // UPDATE (draft only)
-  const onUpdateQuestion = (updated: Question) => {
-    setDraftQuestions(
-      draftQuestions.map(q => q._id === updated._id ? updated : q)
-    );
-  };
-
   // QUIZ SAVE (commit to server)
   const handleSaveQuiz = async () => {
     if (!qid) return;
+
+    // update quiz points based on sum of question points
+    const totalPoints = calculateTotalPoints(draftQuestions);
+    await client.updateQuiz({ ...quiz, points: totalPoints });
+    console.log(`Total points: ${totalPoints}`);
 
     // create or update
     for (const q of draftQuestions) {
@@ -157,18 +129,6 @@ export default function QuizQuestions() {
         await client.deleteQuestion(qid, orig._id);
       }
     }
-
-    // update quiz points based on sum of question points
-    // const totalPoints = calculateTotalPoints(draftQuestions);
-
-    // await client.updateQuiz({
-    //   ...quiz,
-    //   points: totalPoints,
-    // });
-
-    // // re-fetch quizzes from server
-    // const updatedQuizzes = await client.findQuizzesForCourse(cid);
-    // dispatch(setQuizzes(updatedQuizzes));
 
     await fetchQuestions();
   };
