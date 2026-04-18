@@ -11,12 +11,11 @@ import { FormControl, FormLabel, FormSelect, FormCheck, Row, Col } from "react-b
 import { Form, FormGroup, Button } from "react-bootstrap";
 import InputGroup from 'react-bootstrap/InputGroup';
 import InputGroupText from 'react-bootstrap/InputGroupText';
-import { FaRegCalendarAlt } from "react-icons/fa";
 import { useParams } from "next/navigation";
-// import * as db from "../../../../database";
 import { FaPlus } from "react-icons/fa6"; 
 import Link from "next/link";
 import "../index.css";
+import { v4 as uuidv4 } from "uuid";
 
 type Choice = {
   _id: string;
@@ -75,6 +74,7 @@ export default function QuizQuestions() {
 
   const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
   const isEditing = (id: string) => editingQuestionId === id;
+
   const [originalQuestions, setOriginalQuestions] = useState<Question[]>([]);
   
   const { currentUser } = useSelector((state: RootState) => state.accountReducer);
@@ -93,15 +93,21 @@ export default function QuizQuestions() {
   // CREATE (draft only)
   const onCreateQuestionForQuiz = () => {
     const newQuestion: Question = {
-      _id: "temp-" + Date.now(),
+      _id: uuidv4(),
       title: "New Question",
       points: 0,
       question: "",
       type: "MULTIPLE CHOICE",
+      possibleAnswers: [],
+      choices: [],
     };
 
     setDraftQuestions([...draftQuestions, newQuestion]);
+
+    // make the new question immediately editable
+    setEditingQuestionId(newQuestion._id);
   };
+
 
   // QUIZ SAVE (commit to server)
   const handleSaveQuiz = async () => {
@@ -110,7 +116,6 @@ export default function QuizQuestions() {
     // update quiz points based on sum of question points
     const totalPoints = calculateTotalPoints(draftQuestions);
     await client.updateQuiz({ ...quiz, points: totalPoints });
-    console.log(`Total points: ${totalPoints}`);
 
     // create or update
     for (const q of draftQuestions) {
@@ -133,12 +138,14 @@ export default function QuizQuestions() {
     await fetchQuestions();
   };
 
+
   // QUIZ CANCEL (discard draft)
   const handleCancelQuiz = () => {
     setDraftQuestions(originalQuestions);
     setEditingQuestionId(null);
     setDraftQuizPoints(quiz?.points || 0);
   };
+
 
   const updateDraftQuestion = (id: string, field: string, value: any) => {
     setDraftQuestions(prev =>
@@ -147,6 +154,7 @@ export default function QuizQuestions() {
       )
     );
   };
+
 
   const updateChoice = (qid: string, cid: string, text: string) => {
     setDraftQuestions(prev =>
@@ -168,13 +176,14 @@ export default function QuizQuestions() {
     );
   };
 
+
   const addChoice = (qid: string) => {
     setDraftQuestions(prev =>
       prev.map(q => {
         if (q._id !== qid) return q;
 
         const newChoice = {
-          _id: "temp-" + Date.now(),
+          _id: uuidv4(),
           text: "",
           isCorrect: false,
         };
@@ -186,6 +195,7 @@ export default function QuizQuestions() {
       })
     );
   };
+
 
   const deleteChoice = (qid: string, cid: string) => {
     setDraftQuestions(prev =>
@@ -203,6 +213,7 @@ export default function QuizQuestions() {
       })
     );
   };
+
 
   const setCorrectChoice = (qid: string, cid: string) => {
     setDraftQuestions(prev =>
@@ -223,6 +234,50 @@ export default function QuizQuestions() {
       })
     );
   };
+
+
+  const addPossibleAnswer = (qid: string) => {
+    setDraftQuestions(prev =>
+      prev.map(q => {
+        if (q._id !== qid) return q;
+
+        return {
+          ...q,
+          possibleAnswers: [...(q.possibleAnswers ?? []), ""],
+        };
+      })
+    );
+  };
+
+  const updatePossibleAnswer = (qid: string, index: number, value: string) => {
+    setDraftQuestions(prev =>
+      prev.map(q => {
+        if (q._id !== qid) return q;
+
+        const updated = [...(q.possibleAnswers ?? [])];
+        updated[index] = value;
+
+        return {
+          ...q,
+          possibleAnswers: updated,
+        };
+      })
+    );
+  };
+
+  const deletePossibleAnswer = (qid: string, index: number) => {
+    setDraftQuestions(prev =>
+      prev.map(q => {
+        if (q._id !== qid) return q;
+
+        return {
+          ...q,
+          possibleAnswers: q.possibleAnswers?.filter((_, i) => i !== index),
+        };
+      })
+    );
+  };
+
 
   const [draftQuizPoints, setDraftQuizPoints] = useState<number>(quiz?.points || 0);
 
@@ -330,7 +385,7 @@ export default function QuizQuestions() {
                       {/* todo: need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG*/}
                       <FormGroup controlId="quiz-question">
                         <FormControl  disabled={isStudent || !isEditing(q._id)} as="textarea" 
-                                      className="mb-4" rows={15} value={q.question}
+                                      className="mb-4" rows={4} value={q.question}
                                       onChange={(e) =>
                                         updateDraftQuestion(q._id, "question", e.target.value)
                                       }
@@ -504,7 +559,7 @@ export default function QuizQuestions() {
                       {/* todo: need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG*/}
                       <FormGroup controlId="quiz-question">
                         <FormControl  disabled={isStudent || !isEditing(q._id)} as="textarea" 
-                                      className="mb-4" rows={15} value={q.question}
+                                      className="mb-4" rows={4} value={q.question}
                                       onChange={(e) =>
                                         updateDraftQuestion(q._id, "question", e.target.value)
                                       }
@@ -646,7 +701,7 @@ export default function QuizQuestions() {
                       {/* todo: need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG*/}
                       <FormGroup controlId="quiz-question">
                         <FormControl  disabled={isStudent || !isEditing(q._id)} as="textarea" 
-                                      className="mb-4" rows={15} value={q.question}
+                                      className="mb-4" rows={4} value={q.question}
                                       onChange={(e) =>
                                         updateDraftQuestion(q._id, "question", e.target.value)
                                       }
@@ -666,7 +721,49 @@ export default function QuizQuestions() {
                       <Row className="align-items-center mb-3">
                         <FormLabel column sm={{span: 2, offset: 1}} className="text-end mb-4"> Possible Answer</FormLabel> 
                         <Col sm={8} className="p-3">
-                          <FormControl disabled={isStudent || !isEditing(q._id)} placeholder="Enter possible answer" className="mb-3" />
+                          {/* <FormControl disabled={isStudent || !isEditing(q._id)} placeholder="Enter possible answer" className="mb-3" /> */}
+                         
+                         
+                          {q.possibleAnswers?.map((ans: string, index: number) => (
+                            <Row key={index} className="align-items-center mb-2">
+                              
+                              <Col sm={9}>
+                                <FormControl
+                                  disabled={isStudent || !isEditing(q._id)}
+                                  value={ans}
+                                  placeholder="Enter possible answer"
+                                  onChange={(e) =>
+                                    updatePossibleAnswer(q._id, index, e.target.value)
+                                  }
+                                />
+                              </Col>
+
+                              <Col sm={3}>
+                                <Button
+                                  size="sm"
+                                  variant="danger"
+                                  disabled={isStudent || !isEditing(q._id)}
+                                  onClick={() => deletePossibleAnswer(q._id, index)}
+                                >
+                                  Delete
+                                </Button>
+                              </Col>
+
+                            </Row>
+                          ))}
+
+                          {isEditing(q._id) && !isStudent && (
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              className="mt-2"
+                              onClick={() => addPossibleAnswer(q._id)}
+                            >
+                              + Add Answer
+                            </Button>
+                          )}
+
+
                         </Col>
                       </Row>
                     </FormGroup>
@@ -733,11 +830,17 @@ export default function QuizQuestions() {
       <hr/>
 
       <div className="d-flex justify-content-end mt-5">
-        <Button variant="secondary" className="me-2" onClick={handleCancelQuiz} >
+        <Button variant="secondary" className="me-2" onClick={() => {
+          handleCancelQuiz();
+          router.push(`/courses/${cid}/quizzes/${qid}`);
+        }} >
           Cancel
         </Button>
 
-        <Button variant="danger" onClick={handleSaveQuiz} >
+        <Button variant="danger" onClick={async () => {
+          await handleSaveQuiz();
+          router.push(`/courses/${cid}/quizzes`);
+        }} >
           Save
         </Button>
       </div>
