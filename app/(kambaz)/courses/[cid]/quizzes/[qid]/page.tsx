@@ -51,7 +51,8 @@ type Quiz = {
   lock: boolean,
   published: boolean,
   questions: Question[],
-  type: string
+  type: string,
+  description: string
 };
 
 export default function QuizDetail() { 

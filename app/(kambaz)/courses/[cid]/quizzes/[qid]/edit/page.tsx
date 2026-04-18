@@ -1,5 +1,14 @@
 "use client";
 
+// For WYSIWYG editor
+import dynamic from "next/dynamic";
+const CKEditor = dynamic(
+  () => import("@ckeditor/ckeditor5-react").then(mod => mod.CKEditor),
+  { ssr: false }
+);
+const ClassicEditor = require("@ckeditor/ckeditor5-build-classic");
+
+
 import * as client from "../../client";
 import { addQuiz, deleteQuiz, updateQuiz, editQuiz, setQuizzes } from "../../reducer";
 import { useSelector, useDispatch } from "react-redux";
@@ -57,6 +66,7 @@ type Quiz = {
   published: boolean;
   questions: Question[];
   type: string;
+  description: string;
 };
 
 export default function QuizEditor() {
@@ -95,6 +105,7 @@ export default function QuizEditor() {
     published: quiz?.published || false,
     questions: quiz?.questions || [],
     type: quiz?.type || "Graded Quiz",
+    description: quiz?.description || "",
   });
 
   const onCreateQuizForCourse = async (quizToCreate: any) => {
@@ -159,11 +170,29 @@ export default function QuizEditor() {
         {/* todo: need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG*/}
         <FormGroup controlId="quiz-description">
           <FormLabel className="fw-bold">Quiz Instructions:</FormLabel>
-          <FormControl  disabled={isStudent} as="textarea" 
-                        className="mb-4" rows={15} value={"description"}/>
+
+
+          {/* <FormControl  disabled={isStudent} as="textarea" 
+                        className="mb-4" rows={15} value={"description"}/> */}
+          
+          <CKEditor
+            editor={ClassicEditor}
+            data={quizState.description}
+            disabled={isStudent}
+            onChange={(event: any, editor: any) => {
+              const data = editor.getData();
+              setQuizState({
+                ...quizState,
+                description: data,
+              });
+            }}
+          />
+
+
+
         </FormGroup>
         <FormGroup controlId="quiz-type">
-          <Row>
+          <Row className="mt-5">
             <FormLabel column sm={{ span: 1, offset: 3 }} className="text-end mb-4">
               Quiz Type
             </FormLabel>

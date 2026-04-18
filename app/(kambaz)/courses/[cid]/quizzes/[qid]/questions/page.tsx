@@ -1,5 +1,13 @@
 "use client";
 
+// For WYSIWYG editor
+import dynamic from "next/dynamic";
+const CKEditor = dynamic(
+  () => import("@ckeditor/ckeditor5-react").then(mod => mod.CKEditor),
+  { ssr: false }
+);
+const ClassicEditor = require("@ckeditor/ckeditor5-build-classic");
+
 import { useState, useEffect } from "react";
 import * as client from "../../client";
 import { updateQuiz, setQuizzes } from "../../reducer";
@@ -54,7 +62,8 @@ type Quiz = {
   lock: boolean,
   published: boolean,
   questions: Question[],
-  type: string
+  type: string,
+  description: string
 };
 
 export default function QuizQuestions() {
@@ -382,20 +391,29 @@ export default function QuizQuestions() {
                     </Row>
 
                     <Row>
-                      {/* todo: need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG*/}
                       <FormGroup controlId="quiz-question">
-                        <FormControl  disabled={isStudent || !isEditing(q._id)} as="textarea" 
+                        {/* <FormControl  disabled={isStudent || !isEditing(q._id)} as="textarea" 
                                       className="mb-4" rows={4} value={q.question}
                                       onChange={(e) =>
                                         updateDraftQuestion(q._id, "question", e.target.value)
                                       }
+                        /> */}
+                        <CKEditor
+                          editor={ClassicEditor}
+                          data={q.question || ""}
+                          disabled={isStudent || !isEditing(q._id)}
+                          onChange={(event: any, editor: any) => {
+                            const data = editor.getData();
+                            updateDraftQuestion(q._id, "question", data);
+                          }}
                         />
+
                       </FormGroup>
                     </Row>
 
                     <Row>
                       <Col>
-                        <FormLabel className="fw-bold fs-5">
+                        <FormLabel className="fw-bold mt-3 fs-5">
                           Answers:
                         </FormLabel>
                       </Col>
@@ -556,20 +574,22 @@ export default function QuizQuestions() {
                     </Row>
 
                     <Row>
-                      {/* todo: need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG*/}
                       <FormGroup controlId="quiz-question">
-                        <FormControl  disabled={isStudent || !isEditing(q._id)} as="textarea" 
-                                      className="mb-4" rows={4} value={q.question}
-                                      onChange={(e) =>
-                                        updateDraftQuestion(q._id, "question", e.target.value)
-                                      }
+                        <CKEditor
+                          editor={ClassicEditor}
+                          data={q.question || ""}
+                          disabled={isStudent || !isEditing(q._id)}
+                          onChange={(event: any, editor: any) => {
+                            const data = editor.getData();
+                            updateDraftQuestion(q._id, "question", data);
+                          }}
                         />
                       </FormGroup>
                     </Row>
 
                     <Row>
                       <Col>
-                        <FormLabel className="fw-bold fs-5">
+                        <FormLabel className="fw-bold mt-3 fs-5">
                           Answers:
                         </FormLabel>
                       </Col>
@@ -698,20 +718,22 @@ export default function QuizQuestions() {
                     </Row>
 
                     <Row>
-                      {/* todo: need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG*/}
                       <FormGroup controlId="quiz-question">
-                        <FormControl  disabled={isStudent || !isEditing(q._id)} as="textarea" 
-                                      className="mb-4" rows={4} value={q.question}
-                                      onChange={(e) =>
-                                        updateDraftQuestion(q._id, "question", e.target.value)
-                                      }
+                        <CKEditor
+                          editor={ClassicEditor}
+                          data={q.question || ""}
+                          disabled={isStudent || !isEditing(q._id)}
+                          onChange={(event: any, editor: any) => {
+                            const data = editor.getData();
+                            updateDraftQuestion(q._id, "question", data);
+                          }}
                         />
                       </FormGroup>
                     </Row>
 
                     <Row>
                       <Col>
-                        <FormLabel className="fw-bold fs-5">
+                        <FormLabel className="fw-bold mt-3 fs-5">
                           Answers:
                         </FormLabel>
                       </Col>
