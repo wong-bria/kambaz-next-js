@@ -67,24 +67,26 @@ export default function QuizDetail() {
 
   const yesNo = (value: boolean | undefined) => (value ? "Yes" : "No");
 
-  if (isStudent) {
-    return (
-      <div>
-        <h2>{quiz?.title}</h2>
-        <button className="btn btn-primary">Start Quiz</button>
-      </div>
-    );
-  }
+  // if (isStudent) {
+  //   return (
+  //     <div>
+  //       <h2>{quiz?.title}</h2>
+  //       <button className="btn btn-primary">Start Quiz</button>
+  //     </div>
+  //   );
+  // }
   
   return ( 
     <>
         <div className="d-flex justify-content-center align-items-center mb-3">
           <button className="btn btn-secondary mb-3 me-2"
+                  disabled={isStudent}
                   onClick={() => {
                     router.push(`/courses/${cid}/quizzes/${qid}/preview`);
                   }}>
             Preview</button>
           <button className="btn btn-secondary mb-3"
+                  disabled={isStudent}
                   onClick={() => {
                     router.push(`/courses/${cid}/quizzes/${qid}/edit`);
                   }}>
@@ -167,6 +169,11 @@ export default function QuizDetail() {
             <Col sm={{span: 3, offset: 2}} className="text-end mb-4 fw-bold">Available from {quiz?.available}</Col> 
             <Col sm={{span: 3, offset: 0}} className="text-end mb-4 fw-bold">Until {quiz?.until}</Col> 
           </Row>
+
+          {/* Students cannot attempt the quiz unless it is published */}
+          <div className="d-flex justify-content-around mt-4">
+            <button disabled={quiz?.published} className="btn btn-primary mb-3 me-2">Start</button>
+          </div>
         </div>
 
     </>

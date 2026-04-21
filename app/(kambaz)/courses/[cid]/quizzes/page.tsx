@@ -25,6 +25,8 @@ export default function Quizzes() {
   const role = (currentUser as any).role;
   const isStudent = role === "STUDENT";
   const dispatch = useDispatch();
+  // must make faculty the only role able to perform CRUD on quizzes 
+  const isFaculty = role === "FACULTY";
 
   const fetchQuizzes = async () => { 
       const quizzes = await client.findQuizzesForCourse(cid as string); 
@@ -32,13 +34,14 @@ export default function Quizzes() {
   }; 
 
   const onRemoveQuiz = async (quizId: string) => { 
+    if (!isFaculty) return;
     await client.deleteQuiz(quizId); 
     dispatch(setQuizzes(quizzes.filter((q: any) => q._id !== quizId))); 
   };
 
   const togglePublish = async (quiz: any) => {
+    if (!isFaculty) return;
     const updatedQuiz = { ...quiz, published: !quiz.published };
-
     await client.updateQuiz(updatedQuiz);
     dispatch(updateQuiz(updatedQuiz));
   };
@@ -74,6 +77,16 @@ export default function Quizzes() {
     }, []); 
   return (
       <div>
+
+        <div> 
+          {/* // Show pop-up message if there are no quizzes */}
+          {quizzes.length === 0 && (
+            <div className="alert alert-info">
+              Click &quot;Add Quiz&quot; to create a new quiz.
+            </div>
+          )}
+        </div>
+
         <QuizzesControls isStudent={isStudent} cid={cid as string} /><br />
         <ListGroup>
           <ListGroupItem className="p-0 mb-5 fs-5 border-gray">
@@ -82,13 +95,15 @@ export default function Quizzes() {
             </div>
 
             <ListGroup className="rounded-0"> 
+              {/* students only see published quizzes...but we want students to always see quizzes  */}
               {quizzes
-              .filter((quiz: any) => {
-                if (isStudent) {
-                  return quiz.published === true;
-                }
-                return true;
-              })
+              // .filter((quiz: any) => {
+              //   if (isStudent) {
+              //     return quiz.published === true;
+              //   }
+              //   return true;
+              // })
+
               .map((quiz: any) => (
                 <ListGroupItem 
                   key={quiz._id} 
