@@ -1,16 +1,10 @@
 "use client";
 
 import * as client from "../../client";
-import { setQuestions, addQuestion, updateQuestion, deleteQuestion, } from "./reducer";
-import { useSelector, useDispatch } from "react-redux"; 
+import { useSelector } from "react-redux"; 
 import { RootState } from "../../../../../store"; 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-// import { FormControl, FormLabel, FormSelect, FormCheck, Row, Col } from "react-bootstrap";
-import { Form, FormGroup, Button } from "react-bootstrap";
-// import InputGroup from 'react-bootstrap/InputGroup';
-// import InputGroupText from 'react-bootstrap/InputGroupText';
-// import { FaRegCalendarAlt } from "react-icons/fa";
+import { Button } from "react-bootstrap";
 import { useParams } from "next/navigation";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
@@ -60,9 +54,6 @@ export default function QuizPreview() {
   const params = useParams();
   const qid = Array.isArray(params.qid) ? params.qid[0] : params.qid;
 
-  const dispatch = useDispatch();
-  const router = useRouter();
-
   const { quizzes } = useSelector((state: RootState) => state.quizzesReducer) as { quizzes: Quiz[] };
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -73,14 +64,46 @@ export default function QuizPreview() {
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
+  // Add local state to store responses
+  const [responses, setResponses] = useState<{ [questionId: string]: string | boolean }>({});
+
+  // Helper function to check if answer is correct
+  const isCorrect = (question: Question, answer: string | boolean) => {
+    switch (question.type) {
+      case "MULTIPLE CHOICE":
+        return question.choices?.some(c => c._id === answer && c.isCorrect);
+      case "TRUE FALSE":
+        return question.correctAnswer === answer;
+      case "FILL IN THE BLANK":
+        return question.possibleAnswers?.some(a => a.toLowerCase() === String(answer).toLowerCase());
+      default:
+        return false;
+    }
+  };
+
   useEffect(() => {
     setStartTime(new Date());
   }, []);
 
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const newArray = [...array]; // copy to avoid mutating original
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
   // fetches questions
   const fetchQuestions = async () => {
     if (!qid) return;
-    const questions = await client.findQuestionsForQuiz(qid as string);
+    let questions = await client.findQuestionsForQuiz(qid as string);
+
+    // Shuffle if quiz.shuffle is true
+    if (quiz?.shuffle) {
+      questions = shuffleArray(questions);
+    }
+
     setQuestions(questions);
   };
 
@@ -112,17 +135,73 @@ export default function QuizPreview() {
       {finished ? (
         <div className="mt-3">
           <hr/>
-          <h1>You finished</h1>
+
+            {/* Calculate total points */}
+            {(() => {
+              const totalPoints = questions.reduce((acc, q) => acc + q.points, 0);
+              const earnedPoints = questions.reduce(
+                (acc, q) => acc + (isCorrect(q, responses[q._id]) ? q.points : 0),
+                0
+              );
+              return (
+                <div className="mb-3">
+                  <strong>Score:</strong> {earnedPoints} / {totalPoints} points
+                </div>
+              );
+            })()}
+          <div>
+            These were your responses:
+            <ul>
+              {questions.map((q) => (
+                <li key={q._id}>
+                  <div dangerouslySetInnerHTML={{ __html: q.question }} />
+                  <div>
+                    Your answer:{" "}
+                    {q.type === "MULTIPLE CHOICE" && q.choices?.find(c => c._id === responses[q._id])?.text}
+                    {q.type === "TRUE FALSE" && String(responses[q._id])}
+                    {q.type === "FILL IN THE BLANK" && String(responses[q._id])}
+                  </div>
+                  <div>
+                    {isCorrect(q, responses[q._id]) ? (
+                      <span className="text-success">Correct</span>
+                    ) : (
+                      <span className="text-danger">Incorrect</span>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       ) : questions.length > 0 && currentQuestion ? (
         <>
-          <div className="fw-bold mt-3 fs-2">
-            Quiz Instructions
+          <div className="d-flex align-items-start justify-content-between mt-3 mb-2">
+            {/* Quiz Instructions */}
+            <div className="fw-bold fs-2">
+              Quiz Instructions
+            </div>
+
+            {/* Vertical Jump Links on the Right */}
+            <div  className="d-flex flex-column gap-2"
+                  style={{
+                    maxHeight: "110px",
+                    overflowY: "auto",
+                  }}>
+              {questions.map((_, index) => (
+                <Button
+                  key={index}
+                  size="sm"
+                  variant={index === currentIndex ? "danger" : "outline-danger"}
+                  onClick={() => setCurrentIndex(index)}
+                >
+                  Question {index + 1}
+                </Button>
+              ))}
+            </div>
           </div>
           <hr/>
 
           {/* Question */}
-
           <div className="border border-dark p-3 mx-5">
             <div className="border-bottom border-dark align-items-center d-flex justify-content-between mb-3">
               <div className="fw-bold fs-4">
@@ -142,7 +221,14 @@ export default function QuizPreview() {
                 <div className="d-flex flex-column gap-2">
                   {currentQuestion.choices?.map((choice) => (
                     <label key={choice._id} className="border p-2 rounded d-flex align-items-center gap-2">
-                      <input type="radio" name={currentQuestion._id} />
+                      <input type="radio" name={currentQuestion._id}
+                             checked={responses[currentQuestion._id] === choice._id}
+                             onChange={() =>
+                              setResponses((prev) => ({
+                                ...prev,
+                                [currentQuestion._id]: choice._id,
+                              }))
+                            } />
                       {choice.text}
                     </label>
                   ))}
@@ -152,11 +238,23 @@ export default function QuizPreview() {
               {currentQuestion.type === "TRUE FALSE" && (
                 <div className="d-flex flex-column gap-2">
                   <label className="border p-2 rounded d-flex align-items-center gap-2">
-                    <input type="radio" name={currentQuestion._id} />
+                    <input type="radio" name={currentQuestion._id} checked={responses[currentQuestion._id] === true}
+                            onChange={() =>
+                              setResponses((prev) => ({
+                                ...prev,
+                                [currentQuestion._id]: true,
+                              }))
+                            } />
                     True
                   </label>
                   <label className="border p-2 rounded d-flex align-items-center gap-2">
-                    <input type="radio" name={currentQuestion._id} />
+                    <input type="radio" name={currentQuestion._id} checked={responses[currentQuestion._id] === false}
+                            onChange={() =>
+                              setResponses((prev) => ({
+                                ...prev,
+                                [currentQuestion._id]: false,
+                              }))
+                            } />
                     False
                   </label>
                 </div>
@@ -167,6 +265,13 @@ export default function QuizPreview() {
                   type="text"
                   className="form-control"
                   placeholder="Type your answer..."
+                  value={String(responses[currentQuestion._id] || "")}
+                  onChange={(e) =>
+                    setResponses((prev) => ({
+                      ...prev,
+                      [currentQuestion._id]: e.target.value,
+                    }))
+                  }
                 />
               )}
             </div>
