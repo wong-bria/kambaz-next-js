@@ -172,7 +172,7 @@ export default function QuizDetail() {
 
           {/* Students cannot attempt the quiz unless it is published */}
           <div className="d-flex justify-content-around mt-4">
-            <button disabled={quiz?.published} className="btn btn-primary mb-3 me-2">Start</button>
+            <button disabled={!quiz?.published} className="btn btn-primary mb-3 me-2">Start</button>
           </div>
         </div>
 
