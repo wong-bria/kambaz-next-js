@@ -74,6 +74,15 @@ export default function Quizzes() {
     }, []); 
   return (
       <div>
+
+        <div>
+          {quizzes.length === 0 && (
+            <div className="alert alert-info">
+              Click &quot;Add Quiz&quot; to create a new quiz.
+            </div>
+          )}
+        </div>
+
         <QuizzesControls isStudent={isStudent} cid={cid as string} /><br />
         <ListGroup>
           <ListGroupItem className="p-0 mb-5 fs-5 border-gray">
