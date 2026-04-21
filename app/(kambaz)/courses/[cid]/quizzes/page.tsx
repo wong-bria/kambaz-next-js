@@ -46,28 +46,47 @@ export default function Quizzes() {
     dispatch(updateQuiz(updatedQuiz));
   };
 
-  const parseQuizDate = (dateStr: string) => {
-      if (!dateStr) return null;
-      return new Date(dateStr);
-    };
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    }).format(date);
+  };
 
-    const getQuizStatus = (quiz: any) => {
+  const parseQuizDate = (dateStr: string) => {
+    if (!dateStr) return null; // Return null if no date string is provided
+    
+    const date = new Date(dateStr); // Convert the string to a Date object
+    return date; // Return the Date object directly (no formatting here)
+  };
+
+  const getQuizStatus = (quiz: any) => {
     const now = new Date();
 
     const availableDate = parseQuizDate(quiz.available);
     const untilDate = parseQuizDate(quiz.until);
 
+    if (!availableDate || !untilDate) {
+      console.log("Invalid date:", quiz.available, quiz.until);
+      return "Unknown";
+    }
+
     if (availableDate && now < availableDate) {
-      return `Not available until ${quiz.available}`;
+      return `Not available until ${formatDate(availableDate)}`;
     }
 
     if (availableDate && untilDate && now >= availableDate && now <= untilDate) {
-      return `Available ${quiz.available}`;
+      return `Available ${formatDate(availableDate)}`;
     }
 
-    if (availableDate && now > availableDate) {
+    if (availableDate && now > untilDate) {
       return "Closed";
     }
+
+    console.log(availableDate, untilDate, now);
 
     return "Unknown";
   };
@@ -123,7 +142,7 @@ export default function Quizzes() {
                             {getQuizStatus(quiz)}
                           </div>
                           <div className="me-2 ms-2">|</div>
-                          <div className="ms-2 me-2 fw-bold">Due {quiz.due}</div>
+                          <div className="ms-2 me-2 fw-bold">Due {quiz.due && formatDate(new Date(quiz.due))}</div>
                           <div className="me-2 ms-2"> | </div>
                           <div className="ms-2 me-2">{quiz.points} pts</div>
                           <div className="me-2 ms-2">|</div>
