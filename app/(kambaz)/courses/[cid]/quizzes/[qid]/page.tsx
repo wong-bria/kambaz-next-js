@@ -67,24 +67,26 @@ export default function QuizDetail() {
 
   const yesNo = (value: boolean | undefined) => (value ? "Yes" : "No");
 
-  if (isStudent) {
-    return (
-      <div>
-        <h2>{quiz?.title}</h2>
-        <button className="btn btn-primary">Start Quiz</button>
-      </div>
-    );
-  }
+  // if (isStudent) {
+  //   return (
+  //     <div>
+  //       <h2>{quiz?.title}</h2>
+  //       <button className="btn btn-primary">Start Quiz</button>
+  //     </div>
+  //   );
+  // }
   
   return ( 
     <>
         <div className="d-flex justify-content-center align-items-center mb-3">
           <button className="btn btn-secondary mb-3 me-2"
+                  disabled={isStudent}
                   onClick={() => {
                     router.push(`/courses/${cid}/quizzes/${qid}/preview`);
                   }}>
             Preview</button>
           <button className="btn btn-secondary mb-3"
+                  disabled={isStudent}
                   onClick={() => {
                     router.push(`/courses/${cid}/quizzes/${qid}/edit`);
                   }}>
