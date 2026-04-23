@@ -19,16 +19,6 @@ export default function ControlButtons(
   const handleShow = () => setShow(true);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // students are not allowed to click on the three verticle dots of a quiz 
-  // if (isStudent) {
-  //   return (
-  //     <div className="float-end">
-  //       <GreenCheckmark /> 
-  //       <IoEllipsisVertical className="ms-4 fs-4" />
-  //     </div>
-  //   );
-  // }
-
   return ( 
     
     <div className="d-flex align-items-center float-end"> 
@@ -45,8 +35,6 @@ export default function ControlButtons(
           <CiNoWaitingSign className="text-danger" />
         )}
       </div>
-
-      
 
       <IoEllipsisVertical style={{ cursor: !isStudent ? "pointer" : "default" }}
                           className="ms-4 fs-4"

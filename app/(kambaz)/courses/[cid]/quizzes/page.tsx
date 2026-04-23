@@ -5,11 +5,9 @@ import * as client from "./client";
 import { useSelector, useDispatch } from "react-redux"; 
 import { addQuiz, deleteQuiz, updateQuiz, editQuiz, setQuizzes } from "./reducer";
 import { RootState } from "../../../store"; 
-
+import { useState } from "react";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
-import { BsGripVertical } from "react-icons/bs";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
-import { TfiWrite } from "react-icons/tfi";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import QuizzesControls from "./QuizzesControls";
@@ -20,13 +18,16 @@ import "../assignments/index.css";
 
 export default function Quizzes() {
   const { cid } = useParams();
-  const { quizzes } = useSelector((state: RootState) => state.quizzesReducer); 
+  const { quizzes } = useSelector((state: RootState) => state.quizzesReducer) as { quizzes: any[] };
   const { currentUser } = useSelector((state: RootState) => state.accountReducer); 
+
   const role = (currentUser as any).role;
   const isStudent = role === "STUDENT";
   const dispatch = useDispatch();
   // must make faculty the only role able to perform CRUD on quizzes 
   const isFaculty = role === "FACULTY";
+
+  const [latestAttempts, setLatestAttempts] = useState<Record<string, any>>({});
 
   const fetchQuizzes = async () => { 
       const quizzes = await client.findQuizzesForCourse(cid as string); 
@@ -70,7 +71,6 @@ export default function Quizzes() {
     const untilDate = parseQuizDate(quiz.until);
 
     if (!availableDate || !untilDate) {
-      console.log("Invalid date:", quiz.available, quiz.until);
       return "Unknown";
     }
 
@@ -86,14 +86,35 @@ export default function Quizzes() {
       return "Closed";
     }
 
-    console.log(availableDate, untilDate, now);
-
     return "Unknown";
   };
 
   useEffect(() => { 
       fetchQuizzes(); 
     }, []); 
+
+  useEffect(() => {
+    const fetchAttempts = async () => {
+      if (!isStudent || !currentUser?._id) return;
+
+      const attemptsMap: Record<string, any> = {};
+
+      for (const quiz of quizzes) {
+        const attempt = await client.findLatestAttempt(
+          quiz._id,
+          currentUser._id
+        );
+        if (attempt) {
+          attemptsMap[quiz._id] = attempt;
+        }
+      }
+
+      setLatestAttempts(attemptsMap);
+    };
+
+    fetchAttempts();
+  }, [quizzes, currentUser]);
+
   return (
       <div>
 
@@ -114,15 +135,7 @@ export default function Quizzes() {
             </div>
 
             <ListGroup className="rounded-0"> 
-              {/* students only see published quizzes...but we want students to always see quizzes  */}
               {quizzes
-              // .filter((quiz: any) => {
-              //   if (isStudent) {
-              //     return quiz.published === true;
-              //   }
-              //   return true;
-              // })
-
               .map((quiz: any) => (
                 <ListGroupItem 
                   key={quiz._id} 
@@ -148,7 +161,13 @@ export default function Quizzes() {
                           <div className="me-2 ms-2">|</div>
                           <div className="ms-2 me-2">{quiz.questions.length} Questions</div>
                           <div className="ms-2 me-2">|</div>
-                          <div className="ms-2">score</div>
+                          <div className="ms-2">
+                            {isStudent
+                              ? latestAttempts[quiz._id]
+                                ? `${latestAttempts[quiz._id].score} / ${latestAttempts[quiz._id].totalPoints}`
+                                : "score"
+                              : "score"}
+                          </div>
                         </div>
                       </div>
                     </div>

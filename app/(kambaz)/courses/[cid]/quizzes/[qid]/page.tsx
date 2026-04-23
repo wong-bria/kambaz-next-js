@@ -1,18 +1,13 @@
 "use client";
 
-// import * as client from "../client";
-// import { setAssignments, addAssignment, updateAssignment, editAssignment } from "../reducer";
 import { useSelector, useDispatch } from "react-redux"; 
 import { RootState } from "../../../../store"; 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FormControl, FormLabel, FormSelect, FormCheck, Row, Col } from "react-bootstrap";
-// import { Form, FormGroup, Button } from "react-bootstrap";
-// import InputGroup from 'react-bootstrap/InputGroup';
-// import InputGroupText from 'react-bootstrap/InputGroupText';
+import { Row, Col } from "react-bootstrap";
 import { useParams } from "next/navigation";
-// import * as db from "../../../../database";
 import { PiPencilLight } from "react-icons/pi";
+import * as client from "../client";
 
 type Choice = {
   _id: string;
@@ -56,7 +51,9 @@ type Quiz = {
 };
 
 export default function QuizDetail() { 
-  const { cid, qid } = useParams();
+  const params = useParams();
+  const { cid } = params
+  const qid = Array.isArray(params.qid) ? params.qid[0] : params.qid;
   const { quizzes } = useSelector((state: RootState) => state.quizzesReducer) as { quizzes: Quiz[] };
   const quiz = quizzes.find((quiz: Quiz) => quiz._id === qid);
   const router = useRouter();
@@ -67,6 +64,13 @@ export default function QuizDetail() {
 
   const yesNo = (value: boolean | undefined) => (value ? "Yes" : "No");
 
+  const [attempt, setAttempt] = useState<any>(null);
+
+  const maxAttempts = parseInt(quiz?.howManyAttempts || "0");
+  const currentAttemptNumber = attempt?.attemptNumber || 0;
+
+  const hasRemainingAttempts = currentAttemptNumber < maxAttempts;
+
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
@@ -76,6 +80,21 @@ export default function QuizDetail() {
       hour12: true
     }).format(date);
   };
+
+    useEffect(() => {
+    const fetchAttempt = async () => {
+      if (!qid || !currentUser?._id) return;
+
+      const latest = await client.findLatestAttempt(qid, currentUser._id);
+      setAttempt(latest);
+    };
+
+    if (isStudent) {
+      fetchAttempt();
+    }
+  }, [qid, currentUser]);
+
+  const hasTakenQuiz = !!attempt;
   
   return ( 
     <>
@@ -174,8 +193,32 @@ export default function QuizDetail() {
           {/* Students cannot attempt the quiz unless it is published */}
           {isStudent && (
             <div className="d-flex justify-content-around mt-4">
-              <button disabled={!quiz?.published} className="btn btn-primary mb-3 me-2">
+              <button disabled={!quiz?.published || !hasRemainingAttempts}
+                      className="btn btn-danger mb-3 me-2"
+                      onClick={() => {
+                        console.log(maxAttempts, currentAttemptNumber, hasRemainingAttempts);
+                        if (!quiz?.accessCode) {
+                          router.push(`/courses/${cid}/quizzes/${qid}/quiz`);
+                          return;
+                        } 
+
+                        const entered = prompt("Enter access code:");
+
+                        if (entered === quiz.accessCode) {
+                          router.push(`/courses/${cid}/quizzes/${qid}/quiz`);
+                        } else {
+                          alert("Incorrect access code.");
+                        }
+                      }}
+              >
                 Start
+              </button>
+              <button disabled={!quiz?.published || !hasTakenQuiz} className="btn btn-danger mb-3 me-2"
+                      onClick={() => {
+                          router.push(`/courses/${cid}/quizzes/${qid}/lastAttempt`);
+                        }}
+              >
+                Last Attempt
               </button>
             </div>
           )}
