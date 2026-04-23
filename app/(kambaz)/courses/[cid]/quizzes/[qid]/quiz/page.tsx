@@ -50,8 +50,9 @@ type Quiz = {
   description: string
 };
 
-export default function QuizPreview() { 
+export default function TakingQuiz() { 
   const params = useParams();
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const qid = Array.isArray(params.qid) ? params.qid[0] : params.qid;
 
   const { quizzes } = useSelector((state: RootState) => state.quizzesReducer) as { quizzes: Quiz[] };
@@ -80,6 +81,29 @@ export default function QuizPreview() {
         return false;
     }
   };
+
+  const submitQuiz = async () => {
+  if (!quiz || !startTime) return;
+
+  const totalPoints = questions.reduce((acc, q) => acc + q.points, 0);
+  const earnedPoints = questions.reduce(
+    (acc, q) => acc + (isCorrect(q, responses[q._id]) ? q.points : 0),
+    0
+  );
+
+  const attempt = {
+    userId: currentUser?._id,
+    quizId: quiz._id,
+    responses,
+    score: earnedPoints,
+    totalPoints,
+    startedAt: startTime,
+    submittedAt: new Date(),
+  };
+
+  await client.createQuizAttempt(attempt);
+  setFinished(true);
+};
 
   useEffect(() => {
     setStartTime(new Date());
@@ -116,9 +140,6 @@ export default function QuizPreview() {
   return ( 
     <div>
       <h1>{quiz?.title}</h1>
-      <div className="text-danger bg-danger-subtle rounded p-2 mt-3 mb-3 d-flex align-items-center gap-2">
-        <AiOutlineExclamationCircle /> This is a preview of the published version of the quiz.
-      </div>
       <div>
         Started:{" "}
         {startTime &&
@@ -285,7 +306,7 @@ export default function QuizPreview() {
                           setCurrentIndex((i) => i - 1);
                           setLastSaved(new Date());
                       }}
-              disabled={currentIndex === 0}
+              disabled={currentIndex === 0 || quiz?.lock}
               size="lg"
               variant="secondary"
             >
@@ -319,7 +340,7 @@ export default function QuizPreview() {
             </div>
             <Button
               className="d-flex align-items-center gap-1"
-              onClick={() => setFinished(true)}
+              onClick={submitQuiz}
               size="lg"
               variant="secondary"
             >

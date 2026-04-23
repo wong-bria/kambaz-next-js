@@ -48,3 +48,15 @@ export const updateQuestion = async (quizId: string, question: any) => {
   const { data } = await axios.put(`${QUIZZES_API}/${quizId}/questions/${question._id}`, question); 
   return data; 
 };
+
+export const createQuizAttempt = async (attempt: any) => {
+  const response = await axios.post(`${QUIZZES_API}/${attempt.quizId}/quizAttempts`, attempt);
+  return response.data;
+}
+
+export const findLatestAttempt = async (quizId: string, userId: string) => {
+  const response = await axios.get(
+    `${QUIZZES_API}/${quizId}/users/${userId}/attempt`
+  );
+  return response.data;
+};

@@ -5,11 +5,9 @@ import * as client from "./client";
 import { useSelector, useDispatch } from "react-redux"; 
 import { addQuiz, deleteQuiz, updateQuiz, editQuiz, setQuizzes } from "./reducer";
 import { RootState } from "../../../store"; 
-
+import { useState } from "react";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
-import { BsGripVertical } from "react-icons/bs";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
-import { TfiWrite } from "react-icons/tfi";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import QuizzesControls from "./QuizzesControls";
@@ -20,11 +18,16 @@ import "../assignments/index.css";
 
 export default function Quizzes() {
   const { cid } = useParams();
-  const { quizzes } = useSelector((state: RootState) => state.quizzesReducer); 
+  const { quizzes } = useSelector((state: RootState) => state.quizzesReducer) as { quizzes: any[] };
   const { currentUser } = useSelector((state: RootState) => state.accountReducer); 
+
   const role = (currentUser as any).role;
   const isStudent = role === "STUDENT";
   const dispatch = useDispatch();
+  // must make faculty the only role able to perform CRUD on quizzes 
+  const isFaculty = role === "FACULTY";
+
+  const [latestAttempts, setLatestAttempts] = useState<Record<string, any>>({});
 
   const fetchQuizzes = async () => { 
       const quizzes = await client.findQuizzesForCourse(cid as string); 
@@ -32,37 +35,54 @@ export default function Quizzes() {
   }; 
 
   const onRemoveQuiz = async (quizId: string) => { 
+    if (!isFaculty) return;
     await client.deleteQuiz(quizId); 
     dispatch(setQuizzes(quizzes.filter((q: any) => q._id !== quizId))); 
   };
 
   const togglePublish = async (quiz: any) => {
+    if (!isFaculty) return;
     const updatedQuiz = { ...quiz, published: !quiz.published };
-
     await client.updateQuiz(updatedQuiz);
     dispatch(updateQuiz(updatedQuiz));
   };
 
-  const parseQuizDate = (dateStr: string) => {
-      if (!dateStr) return null;
-      return new Date(dateStr);
-    };
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    }).format(date);
+  };
 
-    const getQuizStatus = (quiz: any) => {
+  const parseQuizDate = (dateStr: string) => {
+    if (!dateStr) return null; // Return null if no date string is provided
+    
+    const date = new Date(dateStr); // Convert the string to a Date object
+    return date; // Return the Date object directly (no formatting here)
+  };
+
+  const getQuizStatus = (quiz: any) => {
     const now = new Date();
 
     const availableDate = parseQuizDate(quiz.available);
     const untilDate = parseQuizDate(quiz.until);
 
+    if (!availableDate || !untilDate) {
+      return "Unknown";
+    }
+
     if (availableDate && now < availableDate) {
-      return `Not available until ${quiz.available}`;
+      return `Not available until ${formatDate(availableDate)}`;
     }
 
     if (availableDate && untilDate && now >= availableDate && now <= untilDate) {
-      return `Available ${quiz.available}`;
+      return `Available ${formatDate(availableDate)}`;
     }
 
-    if (availableDate && now > availableDate) {
+    if (availableDate && now > untilDate) {
       return "Closed";
     }
 
@@ -72,8 +92,41 @@ export default function Quizzes() {
   useEffect(() => { 
       fetchQuizzes(); 
     }, []); 
+
+  useEffect(() => {
+    const fetchAttempts = async () => {
+      if (!isStudent || !currentUser?._id) return;
+
+      const attemptsMap: Record<string, any> = {};
+
+      for (const quiz of quizzes) {
+        const attempt = await client.findLatestAttempt(
+          quiz._id,
+          currentUser._id
+        );
+        if (attempt) {
+          attemptsMap[quiz._id] = attempt;
+        }
+      }
+
+      setLatestAttempts(attemptsMap);
+    };
+
+    fetchAttempts();
+  }, [quizzes, currentUser]);
+
   return (
       <div>
+
+        <div> 
+          {/* // Show pop-up message if there are no quizzes */}
+          {quizzes.length === 0 && (
+            <div className="alert alert-info">
+              Click &quot;Add Quiz&quot; to create a new quiz.
+            </div>
+          )}
+        </div>
+
         <QuizzesControls isStudent={isStudent} cid={cid as string} /><br />
         <ListGroup>
           <ListGroupItem className="p-0 mb-5 fs-5 border-gray">
@@ -83,12 +136,6 @@ export default function Quizzes() {
 
             <ListGroup className="rounded-0"> 
               {quizzes
-              .filter((quiz: any) => {
-                if (isStudent) {
-                  return quiz.published === true;
-                }
-                return true;
-              })
               .map((quiz: any) => (
                 <ListGroupItem 
                   key={quiz._id} 
@@ -108,13 +155,19 @@ export default function Quizzes() {
                             {getQuizStatus(quiz)}
                           </div>
                           <div className="me-2 ms-2">|</div>
-                          <div className="ms-2 me-2 fw-bold">Due {quiz.due}</div>
+                          <div className="ms-2 me-2 fw-bold">Due {quiz.due && formatDate(new Date(quiz.due))}</div>
                           <div className="me-2 ms-2"> | </div>
                           <div className="ms-2 me-2">{quiz.points} pts</div>
                           <div className="me-2 ms-2">|</div>
                           <div className="ms-2 me-2">{quiz.questions.length} Questions</div>
                           <div className="ms-2 me-2">|</div>
-                          <div className="ms-2">score</div>
+                          <div className="ms-2">
+                            {isStudent
+                              ? latestAttempts[quiz._id]
+                                ? `${latestAttempts[quiz._id].score} / ${latestAttempts[quiz._id].totalPoints}`
+                                : "score"
+                              : "score"}
+                          </div>
                         </div>
                       </div>
                     </div>

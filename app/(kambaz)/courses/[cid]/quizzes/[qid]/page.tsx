@@ -1,18 +1,13 @@
 "use client";
 
-// import * as client from "../client";
-// import { setAssignments, addAssignment, updateAssignment, editAssignment } from "../reducer";
 import { useSelector, useDispatch } from "react-redux"; 
 import { RootState } from "../../../../store"; 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FormControl, FormLabel, FormSelect, FormCheck, Row, Col } from "react-bootstrap";
-// import { Form, FormGroup, Button } from "react-bootstrap";
-// import InputGroup from 'react-bootstrap/InputGroup';
-// import InputGroupText from 'react-bootstrap/InputGroupText';
+import { Row, Col } from "react-bootstrap";
 import { useParams } from "next/navigation";
-// import * as db from "../../../../database";
 import { PiPencilLight } from "react-icons/pi";
+import * as client from "../client";
 
 type Choice = {
   _id: string;
@@ -56,7 +51,9 @@ type Quiz = {
 };
 
 export default function QuizDetail() { 
-  const { cid, qid } = useParams();
+  const params = useParams();
+  const { cid } = params
+  const qid = Array.isArray(params.qid) ? params.qid[0] : params.qid;
   const { quizzes } = useSelector((state: RootState) => state.quizzesReducer) as { quizzes: Quiz[] };
   const quiz = quizzes.find((quiz: Quiz) => quiz._id === qid);
   const router = useRouter();
@@ -67,24 +64,49 @@ export default function QuizDetail() {
 
   const yesNo = (value: boolean | undefined) => (value ? "Yes" : "No");
 
-  if (isStudent) {
-    return (
-      <div>
-        <h2>{quiz?.title}</h2>
-        <button className="btn btn-primary">Start Quiz</button>
-      </div>
-    );
-  }
+  const [attempt, setAttempt] = useState<any>(null);
+
+  const maxAttempts = parseInt(quiz?.howManyAttempts || "0");
+  const currentAttemptNumber = attempt?.attemptNumber || 0;
+
+  const hasRemainingAttempts = currentAttemptNumber < maxAttempts;
+
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    }).format(date);
+  };
+
+    useEffect(() => {
+    const fetchAttempt = async () => {
+      if (!qid || !currentUser?._id) return;
+
+      const latest = await client.findLatestAttempt(qid, currentUser._id);
+      setAttempt(latest);
+    };
+
+    if (isStudent) {
+      fetchAttempt();
+    }
+  }, [qid, currentUser]);
+
+  const hasTakenQuiz = !!attempt;
   
   return ( 
     <>
         <div className="d-flex justify-content-center align-items-center mb-3">
           <button className="btn btn-secondary mb-3 me-2"
+                  disabled={isStudent}
                   onClick={() => {
                     router.push(`/courses/${cid}/quizzes/${qid}/preview`);
                   }}>
             Preview</button>
           <button className="btn btn-secondary mb-3"
+                  disabled={isStudent}
                   onClick={() => {
                     router.push(`/courses/${cid}/quizzes/${qid}/edit`);
                   }}>
@@ -163,10 +185,43 @@ export default function QuizDetail() {
           <br/>
 
           <Row>
-            <Col sm={{span: 2, offset: 0}} className="text-end mb-4 fw-bold">Due {quiz?.due}</Col> 
-            <Col sm={{span: 3, offset: 2}} className="text-end mb-4 fw-bold">Available from {quiz?.available}</Col> 
-            <Col sm={{span: 3, offset: 0}} className="text-end mb-4 fw-bold">Until {quiz?.until}</Col> 
+            <Col sm={{span: 2, offset: 0}} className="text-end mb-4 fw-bold">Due {quiz?.due && formatDate(new Date(quiz.due))}</Col> 
+            <Col sm={{span: 3, offset: 2}} className="text-end mb-4 fw-bold">Available from {quiz?.available && formatDate(new Date(quiz.available))}</Col> 
+            <Col sm={{span: 3, offset: 0}} className="text-end mb-4 fw-bold">Until {quiz?.until && formatDate(new Date(quiz.until))}</Col> 
           </Row>
+
+          {/* Students cannot attempt the quiz unless it is published */}
+          {isStudent && (
+            <div className="d-flex justify-content-around mt-4">
+              <button disabled={!quiz?.published || !hasRemainingAttempts}
+                      className="btn btn-danger mb-3 me-2"
+                      onClick={() => {
+                        console.log(maxAttempts, currentAttemptNumber, hasRemainingAttempts);
+                        if (!quiz?.accessCode) {
+                          router.push(`/courses/${cid}/quizzes/${qid}/quiz`);
+                          return;
+                        } 
+
+                        const entered = prompt("Enter access code:");
+
+                        if (entered === quiz.accessCode) {
+                          router.push(`/courses/${cid}/quizzes/${qid}/quiz`);
+                        } else {
+                          alert("Incorrect access code.");
+                        }
+                      }}
+              >
+                Start
+              </button>
+              <button disabled={!quiz?.published || !hasTakenQuiz} className="btn btn-danger mb-3 me-2"
+                      onClick={() => {
+                          router.push(`/courses/${cid}/quizzes/${qid}/lastAttempt`);
+                        }}
+              >
+                Last Attempt
+              </button>
+            </div>
+          )}
         </div>
 
     </>

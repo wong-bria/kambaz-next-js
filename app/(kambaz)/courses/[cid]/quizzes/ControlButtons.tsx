@@ -19,20 +19,11 @@ export default function ControlButtons(
   const handleShow = () => setShow(true);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  if (isStudent) {
-    return (
-      <div className="float-end">
-        <GreenCheckmark /> 
-        <IoEllipsisVertical className="ms-4 fs-4" />
-      </div>
-    );
-  }
-
   return ( 
     
     <div className="d-flex align-items-center float-end"> 
       <div
-        style={{ cursor: "pointer" }}
+        style={{ cursor: !isStudent ? "pointer" : "default" }}
         onClick={() => {
           if (isStudent) return;
           togglePublish();
@@ -45,12 +36,10 @@ export default function ControlButtons(
         )}
       </div>
 
-      
-
-      <IoEllipsisVertical style={{ cursor: "pointer" }}
+      <IoEllipsisVertical style={{ cursor: !isStudent ? "pointer" : "default" }}
                           className="ms-4 fs-4"
         onClick={() => setMenuOpen((prev) => !prev)}/> 
-      {menuOpen && (
+      {!isStudent && menuOpen && (
         <div  className="position-absolute bg-white border rounded shadow-sm"
               style={{ right: 0, zIndex: 1000, minWidth: "150px" }}>
           <Link href={`/courses/${cid}/quizzes/${quizID}`}

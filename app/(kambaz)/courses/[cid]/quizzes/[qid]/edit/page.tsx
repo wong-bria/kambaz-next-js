@@ -84,6 +84,10 @@ export default function QuizEditor() {
   );
   const isStudent = (currentUser as any)?.role === "STUDENT";
 
+  const [limitTime, setLimitTime] = useState<boolean>(
+    quiz?.timeLimit !== "unlimited"
+  );
+  
   const [quizState, setQuizState] = useState({
     _id: qid,
     title: quiz?.title || "",
@@ -91,7 +95,7 @@ export default function QuizEditor() {
     available: quiz?.available || "",
     due: quiz?.due || "",
     points: quiz?.points || 0,
-    shuffle: quiz?.shuffle || true,
+    shuffle: quiz?.shuffle ?? true,
     assignmentGroup: quiz?.assignmentGroup || "Quizzes",
     timeLimit: quiz?.timeLimit || "20 minutes",
     multipleAttempts: quiz?.multipleAttempts || false,
@@ -99,7 +103,7 @@ export default function QuizEditor() {
     showCorrectAnswers: quiz?.showCorrectAnswers || "Immediately",
     until: quiz?.until || "",
     accessCode: quiz?.accessCode || "",
-    oneQuestionPerTime: quiz?.oneQuestionPerTime || true,
+    oneQuestionPerTime: quiz?.oneQuestionPerTime ?? true,
     webcam: quiz?.webcam || false,
     lock: quiz?.lock || false,
     published: quiz?.published || false,
@@ -167,14 +171,8 @@ export default function QuizEditor() {
             }
           />
         </FormGroup>
-        {/* todo: need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG need to update to WYSIWYG*/}
         <FormGroup controlId="quiz-description">
           <FormLabel className="fw-bold">Quiz Instructions:</FormLabel>
-
-
-          {/* <FormControl  disabled={isStudent} as="textarea" 
-                        className="mb-4" rows={15} value={"description"}/> */}
-          
           <CKEditor
             editor={ClassicEditor}
             data={quizState.description}
@@ -238,26 +236,50 @@ export default function QuizEditor() {
               <FormCheck
                 disabled={isStudent} defaultChecked={quizState.shuffle === true} type="checkbox"
                 label="Shuffle Answers" className="mb-4"
+                onChange={(e) => {
+                  setQuizState({ ...quizState, shuffle: e.target.checked });
+                }}
               />
               <FormCheck
                 disabled={isStudent} defaultChecked={quizState.oneQuestionPerTime === true}
                 type="checkbox" label="One Question at a Time" className="mb-4"
+                onChange={(e) => {
+                  setQuizState({ ...quizState, oneQuestionPerTime: e.target.checked });
+                }}
               />
               <FormCheck
                 disabled={isStudent} defaultChecked={quizState.webcam === true}
                 type="checkbox" label="Webcam Required" className="mb-4"
+                onChange={(e) => {
+                  setQuizState({ ...quizState, webcam: e.target.checked });
+                }}
               />
               <FormCheck
                 disabled={isStudent} defaultChecked={quizState.lock === true}
                 type="checkbox" label="Lock Question After Answering" className="mb-4"
+                onChange={(e) => {
+                  setQuizState({ ...quizState, lock: e.target.checked });
+                }}
               />
               <div className="d-flex align-items-center mb-4">
                 
-                <FormCheck disabled={isStudent} type="checkbox" label="Time Limit" className="me-3" />
+                <FormCheck disabled={isStudent} type="checkbox" label="Time Limit" className="me-3"
+                            checked={limitTime}
+                            onChange={(e) => {
+                            const checked = e.target.checked;
+
+                            setLimitTime(checked);
+
+                            setQuizState({
+                              ...quizState,
+                              timeLimit: checked ? quizState.timeLimit : "unlimited",
+                            });
+                          }} />
                 <FormControl disabled={isStudent} className="me-2 ms-5"
                   style={{ width: "110px" }} value={quizState.timeLimit}
-                  onChange={(e) =>
-                    setQuizState({ ...quizState, timeLimit: e.target.value })
+                  onChange={(e) => {
+                    const value = limitTime ? e.target.value : "unlimited";
+                    setQuizState({ ...quizState, timeLimit: value })}
                   }
                 />
                 <FormLabel className="mb-0">Minutes</FormLabel>
@@ -266,16 +288,42 @@ export default function QuizEditor() {
           </Row>
         </FormGroup>
         <FormGroup className="mb-4">
-          
-          <Row>
+          <Row className="align-items-center mb-4">
             <Col sm={{ span: 2, offset: 2 }} className="text-end">
-              <FormLabel className="text-end mb-4"></FormLabel>
+              <FormLabel className="mb-0"></FormLabel>
             </Col>
-            <Col sm={8} className="border rounded p-3">
-              <FormCheck disabled={isStudent}
-                defaultChecked={quizState.multipleAttempts === true}
-                type="checkbox" label="Allow Multiple Attempts" className="me-3"
-              />
+
+            <Col className="border p-3" sm={6}>
+              <div className="d-flex align-items-center gap-3">
+                <FormCheck
+                  disabled={isStudent}
+                  checked={quizState.multipleAttempts === true}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+
+                    setQuizState({
+                      ...quizState,
+                      multipleAttempts: checked,
+                      howManyAttempts: checked ? quizState.howManyAttempts : "1",
+                    })
+                  }}
+                  type="checkbox"
+                  label="Allow Multiple Attempts"
+                />
+
+                <FormControl
+                  className="mb-3"
+                  disabled={isStudent || !quizState.multipleAttempts}
+                  style={{ width: "80px" }}
+                  value={quizState.howManyAttempts}
+                  onChange={(e) =>
+                    setQuizState({
+                      ...quizState,
+                      howManyAttempts: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </Col>
           </Row>
         </FormGroup>
