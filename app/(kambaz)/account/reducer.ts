@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction  } from "@reduxjs/toolkit"; 
+import { createSlice  } from "@reduxjs/toolkit"; 
 
 type User = {
   role: string;
+  _id: string;
 };
 
 type AccountState = {

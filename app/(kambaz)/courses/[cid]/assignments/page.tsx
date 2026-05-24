@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import * as client from "./client";
 import { setAssignments, addAssignment, deleteAssignment, updateAssignment, editAssignment } from "./reducer";
 import { useSelector, useDispatch } from "react-redux"; 
@@ -15,7 +15,6 @@ import AssignmentsControls from "./AssignmentsControls";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import ControlButtons from "./ControlButtons";
 import { useParams } from "next/navigation";
-import * as db from "../../../database";
 
 export default function Assignments() { 
   const { cid } = useParams();
@@ -31,14 +30,13 @@ export default function Assignments() {
   }; 
 
   const onRemoveAssignment = async (assignmentId: string) => { 
-      await client.deleteAssignment(assignmentId); 
-      dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId))); 
-    };
+    await client.deleteAssignment(assignmentId); 
+    dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId))); 
+  };
 
   useEffect(() => { 
     fetchAssignments(); 
   }, []); 
-  console.log("Assignments:", assignments);
   return ( 
     <div id="wd-assignments"> 
       <AssignmentsControls isStudent={isStudent} cid={cid as string} /><br /><br /><br /><br />
@@ -59,11 +57,13 @@ export default function Assignments() {
                   <div className="wd-assignment-flex-row-container">
                     <BsGripVertical className="me-2 fs-3" />
                     <TfiWrite className="me-3 fs-3 text-success" />
+
                     <div className="wd-assignment-flex-col-container">
                       <Link href={`/courses/${cid}/assignments/${assignment._id}`}
                             className="wd-assignment-link mb-0 text-decoration-none text-black" > 
                             {assignment.title}
                       </Link>
+                      
                       <div className="assignment-item-text">
                         <div className="wd-assignment-flex-row-container">
                           <div className="text-danger me-2">Multiple Modules</div>
@@ -87,7 +87,7 @@ export default function Assignments() {
                   </div>
                 </ListGroupItem>
             ))}
-            </ListGroup>
+          </ListGroup>
         </ListGroupItem>
       </ListGroup>
     </div> 
